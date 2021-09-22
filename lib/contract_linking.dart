@@ -19,7 +19,7 @@ class ContractLinking extends ChangeNotifier {
   final String _rpcUrl = "http://10.0.2.2:7545";
   final String _wsUrl = "ws://10.0.2.2:7545/";
   final String _privateKey =
-      "140e4f17c5e58614c1660a18edc8b08dc86b3b9a193328f425a411ff4f4062e";
+      "9f692f77c9989e265c1dbc32bbb6a0691a8234d89e0042f68f0d581e47c3e07d";
 
   late Web3Client _client;
   late bool isLoading = false;
@@ -72,7 +72,7 @@ class ContractLinking extends ChangeNotifier {
 
   getDrivers() async {
     List<dynamic> drivers = await _client
-        .call(contract: _contract, function: _driverPool, params: [1]);
+        .call(contract: _contract, function: _driverPool, params: [BigInt.from(1)]);
     isLoading = false;
     notifyListeners();
   }
