@@ -16,7 +16,7 @@ class LandingPage extends StatelessWidget {
           const Center(
               child: Text(
             "Ride With AppName",
-            style: TextStyle(fontSize: 45.0, color: Colors.black),
+            style: TextStyle(fontSize: 45.0, color: Colors.white),
             textAlign: TextAlign.center,
           )),
           Row(

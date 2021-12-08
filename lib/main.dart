@@ -5,6 +5,7 @@ import 'package:blockchain_ridesharing/pages/landing_page.dart';
 import 'package:blockchain_ridesharing/pages/rider_signup.dart';
 import 'package:blockchain_ridesharing/pages/rider_signin.dart';
 import 'package:blockchain_ridesharing/pages/ride_booking.dart';
+import 'package:blockchain_ridesharing/pages/map_page.dart';
 import 'package:blockchain_ridesharing/pages/conf_trial.dart';
 
 void main() => runApp(MaterialApp(
@@ -14,6 +15,7 @@ void main() => runApp(MaterialApp(
         '/signup': (context) => RiderRegistrationForm(),
         '/signin': (context) => RiderLoginForm(),
         '/ridebook': (context) => BookRide(),
+        '/map':(context) => MapPageWidget()
         //'/confrial': (context) => ConfTrial()
       },
     ));
