@@ -4,7 +4,9 @@ import "package:latlong/latlong.dart";
 import 'package:flutter_map/flutter_map.dart';
 import 'package:blockchain_ridesharing/directions_repo.dart';
 import 'package:blockchain_ridesharing/directions_model.dart';
-//import 'package:ipd_app/pages/conf_trial.dart';
+import 'package:blockchain_ridesharing/autocomplete_model.dart';
+import 'package:blockchain_ridesharing/autocomplete_repo.dart';
+import 'package:blockchain_ridesharing/search_delegate_options.dart';
 
 class BookRide extends StatefulWidget {
   const BookRide({Key? key}) : super(key: key);
@@ -21,25 +23,12 @@ class _BookRideState extends State<BookRide> {
   late Marker _origin;
   late Marker _destination;
 
-  // Marker _origin = Marker(
-  //   width: 80.0,
-  //   height: 80.0,
-  //   point: LatLng(37.77, -122.41),
-  //   builder: (ctx) =>
-  //       Container(
-  //         child: FlutterLogo(),
-  //       ),
-  // );
-  //
-  // Marker _destination = Marker(
-  //   width: 80.0,
-  //   height: 80.0,
-  //   point: LatLng(34.05, -118.24),
-  //   builder: (ctx) =>
-  //       Container(
-  //         child: FlutterLogo(),
-  //       ),
-  // );
+  late LatLng destinationCrd;
+  late LatLng originCrd;
+
+  late Prediction res;
+  TextEditingController _originController = new TextEditingController();
+  TextEditingController _destinationController = new TextEditingController();
   List<Marker> markerlist = [];
   List<LatLng> coordlist = [];
   bool visibleCont = true;
@@ -113,13 +102,21 @@ class _BookRideState extends State<BookRide> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: TextFormField(
+                                        controller: _originController,
+                                        onTap: () async {
+                                          final res = await showSearch(
+                                              context: context, delegate: AutoSearch());
+                                          _originController.text = res!.predictionLocationsDescription[0];
+
+                                          originCrd = res.predictionPoints[0];
+                                        }, // // Show the search delegate here
                                         decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      labelText: 'Source',
-                                    ))))),
+                                          border: InputBorder.none,
+                                          labelText: 'Source',
+                                        ))))),
                         Padding(
                             padding: const EdgeInsets.fromLTRB(
-                                15.0, 7.5, 15.0, 15.0),
+                                15.0, 15.0, 15.0, 7.5),
                             child: Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
@@ -128,10 +125,18 @@ class _BookRideState extends State<BookRide> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: TextFormField(
+                                      controller: _destinationController,
+                                        onTap: () async {
+                                          final res = await showSearch(
+                                              context: context, delegate: AutoSearch());
+                                          _destinationController.text = res!.predictionLocationsDescription[0];
+
+                                          destinationCrd = res.predictionPoints[0];
+                                        }, // the search delegate here
                                         decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      labelText: 'Source',
-                                    ))))),
+                                          border: InputBorder.none,
+                                          labelText: 'Destination',
+                                        ))))),
                         Visibility(
                             visible: visibleText,
                             child: const Text("Estd Time")),
@@ -180,10 +185,10 @@ class _BookRideState extends State<BookRide> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10.0, horizontal: 20.0),
                                     child: Column(
-                                      children: [
-                                        const Text("Line1"),
-                                        const Text("Line2"),
-                                        const Text("Line3")
+                                      children: const [
+                                        Text("Line1"),
+                                        Text("Line2"),
+                                        Text("Line3")
                                       ],
                                     ),
                                   )
@@ -228,15 +233,15 @@ class _BookRideState extends State<BookRide> {
                           children: [
                             Container(
                               width: MediaQuery.of(context).size.width * .40,
-                              child: TextField(
-                                  decoration: const InputDecoration(
+                              child: const TextField(
+                                  decoration: InputDecoration(
                                 labelText: 'Source',
                               )),
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width * .40,
-                              child: TextField(
-                                  decoration: const InputDecoration(
+                              child: const TextField(
+                                  decoration: InputDecoration(
                                 labelText: 'Source',
                               )),
                             )
@@ -253,7 +258,9 @@ class _BookRideState extends State<BookRide> {
         floatingActionButton: !visibleText
             ? Visibility(
                 child: FloatingActionButton.extended(
-                    onPressed: _addMarker,
+                    onPressed: () {
+                      _addMarker(originCrd, destinationCrd);
+                    },
                     label: Text("buttonText"),
                     icon: const Icon(Icons.car_rental)))
             : Visibility(
@@ -278,23 +285,19 @@ class _BookRideState extends State<BookRide> {
     //         CameraUpdate.newCameraPosition(_initialCameraPosition))));
   }
 
-  void _addMarker() async {
+  void _addMarker(LatLng originCrd, LatLng destinationCrd) async {
     _origin = Marker(
       width: 80.0,
       height: 80.0,
-      point: LatLng(19.0032097, 72.8490763),
-      builder: (ctx) => Container(
-        child: FlutterLogo(),
-      ),
+      point: originCrd,
+      builder: (ctx) => const FlutterLogo(),
     );
 
     _destination = Marker(
       width: 80.0,
       height: 80.0,
-      point: LatLng(19.1027874, 72.8485076),
-      builder: (ctx) => Container(
-        child: FlutterLogo(),
-      ),
+      point: destinationCrd,
+      builder: (ctx) => const FlutterLogo(),
     );
 
     markerlist.add(_origin);
@@ -306,6 +309,5 @@ class _BookRideState extends State<BookRide> {
         .getDirections(origin: _origin.point, destination: _destination.point);
     setState(() => _info = directions!);
     coordlist = directions!.polylinePoints;
-    print(directions);
   }
 }
