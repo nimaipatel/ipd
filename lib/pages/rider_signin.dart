@@ -9,6 +9,11 @@ class RiderLoginForm extends StatefulWidget {
 
 class _RiderLoginFormState extends State<RiderLoginForm> {
   final _RiderLoginFormKey = GlobalKey<FormState>();
+
+  // Form Controllers
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +33,9 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
             )),
             Container(
               color: Colors.grey,
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              padding: EdgeInsets.only(top: 10.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              padding: const EdgeInsets.only(top: 10.0),
               child: Form(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,11 +47,12 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _emailController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'Email ID',
@@ -56,11 +63,12 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _passwordController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'Password',

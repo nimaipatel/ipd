@@ -21,43 +21,119 @@ class _MapPageWidgetState extends State<MapPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AppName'),
-        centerTitle: true,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15.0),
-                bottomRight: Radius.circular(15.0))),
-        height: 200.0,
-        child: Column(
-          children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 7.5),
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextFormField(
-                            controller: _originController,
-                            onTap: () async {
-                              final res = await showSearch(
-                                  context: context, delegate: AutoSearch());
-                              _originController.text = res!.predictionLocationsDescription[0];
-                              print(res.predictionPoints[0].longitude);
-                            }, // Show the search delegate here
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              labelText: 'Source',
-                            ))))),
-          ],
-        ),
-      ),
+      body: Visibility(
+          visible: true,
+          child: Container(
+            alignment: Alignment.topCenter,
+            margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * .70,
+                right: 20.0,
+                left: 20.0),
+            child: Container(
+              height: 200.0,
+              width: MediaQuery.of(context).size.width,
+              child: Card(
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 15.0),
+                        child: Card(
+                          child: Row(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 15.0),
+                                height: 75.0,
+                                width: 75.0,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
+                                child: Column(
+
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text("Rio Haryanto"),
+                                    Text("MH-XX-XX-XXXX"),
+                                    Text("Silver Toyota Innova")
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: const [
+                                  Icon(Icons.call),
+                                  Icon(Icons.close)
+                                ],
+                              )
+                            ],
+                          ),
+                        )),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: [
+                    //     Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             vertical: 10.0, horizontal: 15.0),
+                    //         child: SizedBox(
+                    //           width:
+                    //           MediaQuery.of(context).size.width * .30,
+                    //           child: ElevatedButton(
+                    //               onPressed: () {},
+                    //               child: const Text('Cancel'),
+                    //               style: ElevatedButton.styleFrom(
+                    //                   shape: RoundedRectangleBorder(
+                    //                       borderRadius:
+                    //                       BorderRadius.circular(5.0)))),
+                    //         )),
+                    //     Padding(
+                    //         padding: const EdgeInsets.symmetric(
+                    //             vertical: 10.0, horizontal: 15.0),
+                    //         child: SizedBox(
+                    //           width:
+                    //           MediaQuery.of(context).size.width * .30,
+                    //           child: ElevatedButton(
+                    //               onPressed: () {},
+                    //               child: const Text('Call'),
+                    //               style: ElevatedButton.styleFrom(
+                    //                   shape: RoundedRectangleBorder(
+                    //                       borderRadius:
+                    //                       BorderRadius.circular(5.0)))),
+                    //         ))
+                    //   ],
+                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * .30,
+                          child: const TextField(
+                            enabled: false,
+                              decoration: InputDecoration(
+                                labelText: 'Source',
+                              )),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * .30,
+                          child: const TextField(
+                            enabled: false,
+                              decoration: InputDecoration(
+                                labelText: 'Destination',
+                              )),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                color: Colors.white,
+                elevation: 4.0,
+              ),
+            ),
+          )),
     );
   }
 }

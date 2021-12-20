@@ -9,6 +9,17 @@ class RiderRegistrationForm extends StatefulWidget {
 
 class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
   final _RiderRegistrationFormKey = GlobalKey<FormState>();
+
+  // Registration Controllers to send the data to the IPFS Server
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
+  TextEditingController _countryController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +39,8 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
             )),
             Container(
               color: Colors.grey,
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              padding: EdgeInsets.only(top: 10.0),
+              margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              padding: const EdgeInsets.only(top: 10.0),
               child: Form(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,11 +52,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _firstNameController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'First Name',
@@ -56,11 +68,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _lastNameController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'Last Name',
@@ -71,11 +84,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _emailController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'Email Address',
@@ -86,11 +100,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _phoneNumberController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'Phone Number',
@@ -101,11 +116,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _passwordController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'Password',
@@ -116,11 +132,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _cityController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'City',
@@ -131,11 +148,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _stateController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'State',
@@ -146,11 +164,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                       child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: new BorderRadius.circular(5.0),
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
+                                controller: _countryController,
                                   decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 labelText: 'Country',
