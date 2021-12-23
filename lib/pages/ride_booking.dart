@@ -43,6 +43,12 @@ class _BookRideState extends State<BookRide> {
   bool visibleTopMenu = true;
 
   String buttonText = "_addmarker";
+
+  // Structure for Ride Struct for Blockchain
+
+
+
+
   @override
   void toggleState() {
     setState(() {

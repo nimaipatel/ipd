@@ -1,0 +1,202 @@
+{
+	"compiler": {
+		"version": "0.8.0+commit.c7dfd78e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"name": "Rides",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "rideId",
+						"type": "int256"
+					},
+					{
+						"internalType": "address",
+						"name": "riderAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "driverAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "enum DRHS_main.RideStatus",
+						"name": "rideState",
+						"type": "uint8"
+					},
+					{
+						"components": [
+							{
+								"internalType": "int256",
+								"name": "latitude",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "longitude",
+								"type": "int256"
+							}
+						],
+						"internalType": "struct DRHS_main.coordinates",
+						"name": "pickupLocation",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "int256",
+								"name": "latitude",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "longitude",
+								"type": "int256"
+							}
+						],
+						"internalType": "struct DRHS_main.coordinates",
+						"name": "dropoffLocation",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bookingTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rideStartTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rideEndTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rideCost",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "int256",
+						"name": "rideNo",
+						"type": "int256"
+					},
+					{
+						"internalType": "address payable",
+						"name": "transferAddress",
+						"type": "address"
+					}
+				],
+				"name": "endRide",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "initRideBlock",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address payable",
+						"name": "_driverAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "int256",
+						"name": "rideNo",
+						"type": "int256"
+					}
+				],
+				"name": "pairRiderDriver",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "rideCount",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "int256",
+						"name": "rideNo",
+						"type": "int256"
+					}
+				],
+				"name": "startRide",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/DHRS_Main.sol": "DRHS_main"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/DHRS_Main.sol": {
+			"keccak256": "0x4a693442e1df85e3072da2003d2d408f0025e741b6582cc176336ff1abee02be",
+			"urls": [
+				"bzz-raw://cc8a7d6933e5e68a41e70d468768d630016933bb209671977bcb0835915b77b6",
+				"dweb:/ipfs/QmWWsTo3S4szDrSNRyrHzqh54cg6DQXdKAz1TmVrj5Ge7A"
+			]
+		}
+	},
+	"version": 1
+}
