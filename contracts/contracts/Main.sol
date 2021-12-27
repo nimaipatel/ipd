@@ -1,6 +1,6 @@
 pragma solidity ^0.8.0;
 
-contract DRHS_main{
+contract Main{
     enum RideStatus {
         Booked,
         InProgress,

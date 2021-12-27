@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import "package:latlong/latlong.dart";
+import "package:latlong2/latlong.dart";
 
 import 'package:blockchain_ridesharing/autocomplete_model.dart';
 import 'package:blockchain_ridesharing/autocomplete_repo.dart';
 
 import 'package:blockchain_ridesharing/search_delegate_options.dart';
+import 'package:blockchain_ridesharing/contract_linking.dart';
+import 'package:provider/provider.dart';
 
 class MapPageWidget extends StatefulWidget {
   const MapPageWidget({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var contractLink = Provider.of<ContractLinking>(context);
     return Scaffold(
       body: Visibility(
           visible: true,
@@ -55,7 +58,6 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 10.0),
                                 child: Column(
-
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: const [
                                     Text("Rio Haryanto"),
@@ -112,7 +114,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .30,
                           child: const TextField(
-                            enabled: false,
+                              enabled: false,
                               decoration: InputDecoration(
                                 labelText: 'Source',
                               )),
@@ -120,7 +122,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .30,
                           child: const TextField(
-                            enabled: false,
+                              enabled: false,
                               decoration: InputDecoration(
                                 labelText: 'Destination',
                               )),

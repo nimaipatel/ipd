@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import "package:latlong/latlong.dart";
+import "package:latlong2/latlong.dart";
 
 class Directions {
   // final LatLngBounds bounds;

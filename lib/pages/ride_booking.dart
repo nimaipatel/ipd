@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import "package:latlong/latlong.dart";
+import "package:latlong2/latlong.dart";
 import 'package:flutter_map/flutter_map.dart';
 import 'package:blockchain_ridesharing/directions_repo.dart';
 import 'package:blockchain_ridesharing/directions_model.dart';
 import 'package:blockchain_ridesharing/autocomplete_model.dart';
 import 'package:blockchain_ridesharing/autocomplete_repo.dart';
 import 'package:blockchain_ridesharing/search_delegate_options.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'package:blockchain_ridesharing/contract_linking.dart';
+
+// import 'package:blockchain_ridesharing/.env.dart/contract_linking.dart';
 
 class BookRide extends StatefulWidget {
   const BookRide({Key? key}) : super(key: key);
@@ -34,7 +41,6 @@ class _BookRideState extends State<BookRide> {
   TextEditingController _originCardController = TextEditingController();
   TextEditingController _destinationCardController = TextEditingController();
 
-
   List<Marker> markerlist = [];
   List<LatLng> coordlist = [];
 
@@ -45,9 +51,6 @@ class _BookRideState extends State<BookRide> {
   String buttonText = "_addmarker";
 
   // Structure for Ride Struct for Blockchain
-
-
-
 
   @override
   void toggleState() {
@@ -65,6 +68,7 @@ class _BookRideState extends State<BookRide> {
 
   @override
   Widget build(BuildContext context) {
+    var contractLink = Provider.of<ContractLinking>(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Book Ride'),
@@ -119,9 +123,12 @@ class _BookRideState extends State<BookRide> {
                                         controller: _originController,
                                         onTap: () async {
                                           final res = await showSearch(
-                                              context: context, delegate: AutoSearch());
-                                          _originController.text = res!.predictionLocationsDescription[0];
-                                          _originCardController.text = res.predictionLocationsPlace[0];
+                                              context: context,
+                                              delegate: AutoSearch());
+                                          _originController.text = res!
+                                              .predictionLocationsDescription[0];
+                                          _originCardController.text =
+                                              res.predictionLocationsPlace[0];
                                           originCrd = res.predictionPoints[0];
                                         }, // // Show the search delegate here
                                         decoration: const InputDecoration(
@@ -139,13 +146,17 @@ class _BookRideState extends State<BookRide> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: TextFormField(
-                                      controller: _destinationController,
+                                        controller: _destinationController,
                                         onTap: () async {
                                           final res = await showSearch(
-                                              context: context, delegate: AutoSearch());
-                                          _destinationController.text = res!.predictionLocationsDescription[0];
-                                          _destinationCardController.text = res.predictionLocationsPlace[0];
-                                          destinationCrd = res.predictionPoints[0];
+                                              context: context,
+                                              delegate: AutoSearch());
+                                          _destinationController.text = res!
+                                              .predictionLocationsDescription[0];
+                                          _destinationCardController.text =
+                                              res.predictionLocationsPlace[0];
+                                          destinationCrd =
+                                              res.predictionPoints[0];
                                         }, // the search delegate here
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
@@ -165,121 +176,156 @@ class _BookRideState extends State<BookRide> {
               )
             ],
           ),
-              Visibility(
-                  visible: !visibleTopMenu,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .60,
-                        right: 20.0,
-                        left: 20.0),
-                    child: Container(
-                      height: 200.0,
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        child: Column(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5.0, horizontal: 15.0),
-                                child: Card(
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 15.0),
-                                        height: 75.0,
-                                        width: 75.0,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 10.0),
-                                        child: Column(
-
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: const [
-                                            Text("Rio Haryanto"),
-                                            Text("MH-XX-XX-XXXX"),
-                                            Text("Silver Toyota Innova")
-                                          ],
-                                        ),
-                                      ),
-                                      Column(
-                                        children: const [
-                                          Icon(Icons.call),
-                                          Icon(Icons.close)
-                                        ],
-                                      )
-                                    ],
+          Visibility(
+              visible: !visibleTopMenu,
+              child: Container(
+                alignment: Alignment.topCenter,
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * .60,
+                    right: 20.0,
+                    left: 20.0),
+                child: Container(
+                  height: 200.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5.0, horizontal: 15.0),
+                            child: Card(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 15.0),
+                                    height: 75.0,
+                                    width: 75.0,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red,
+                                    ),
                                   ),
-                                )),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            //   children: [
-                            //     Padding(
-                            //         padding: const EdgeInsets.symmetric(
-                            //             vertical: 10.0, horizontal: 15.0),
-                            //         child: SizedBox(
-                            //           width:
-                            //           MediaQuery.of(context).size.width * .30,
-                            //           child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text('Cancel'),
-                            //               style: ElevatedButton.styleFrom(
-                            //                   shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                       BorderRadius.circular(5.0)))),
-                            //         )),
-                            //     Padding(
-                            //         padding: const EdgeInsets.symmetric(
-                            //             vertical: 10.0, horizontal: 15.0),
-                            //         child: SizedBox(
-                            //           width:
-                            //           MediaQuery.of(context).size.width * .30,
-                            //           child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text('Call'),
-                            //               style: ElevatedButton.styleFrom(
-                            //                   shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                       BorderRadius.circular(5.0)))),
-                            //         ))
-                            //   ],
-                            // ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * .30,
-                                  child: TextFormField(
-                                    controller: _originCardController,
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Source',
-                                      )),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * .30,
-                                  child: TextFormField(
-                                    controller: _destinationCardController,
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Destination',
-                                      )),
-                                )
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text("Rio Haryanto"),
+                                        Text("MH-XX-XX-XXXX"),
+                                        Text("Silver Toyota Innova")
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      /* Icon(Icons.call), */
+                                      /* Icon(Icons.close), */
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints.tightFor(
+                                            width: 30, height: 30),
+                                        child: ElevatedButton(
+                                          child: Text(
+                                            'Com',
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                          onPressed: () async {
+                                            await contractLink.initRideBlock();
+                                            await contractLink.pairRiderDriver();
+                                            await contractLink.startRide();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: CircleBorder(),
+                                          ),
+                                        ),
+                                      ),
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints.tightFor(
+                                            width: 30, height: 30),
+                                        child: ElevatedButton(
+                                          child: Text(
+                                            'Con',
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                          onPressed: () async {
+                                            contractLink.endRide();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: CircleBorder(),
+                                          ),
+                                        ),
+                                      ),
+                                      /* icon: Icon(Icons.car_rental)) */
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //   children: [
+                        //     Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //             vertical: 10.0, horizontal: 15.0),
+                        //         child: SizedBox(
+                        //           width:
+                        //           MediaQuery.of(context).size.width * .30,
+                        //           child: ElevatedButton(
+                        //               onPressed: () {},
+                        //               child: const Text('Cancel'),
+                        //               style: ElevatedButton.styleFrom(
+                        //                   shape: RoundedRectangleBorder(
+                        //                       borderRadius:
+                        //                       BorderRadius.circular(5.0)))),
+                        //         )),
+                        //     Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //             vertical: 10.0, horizontal: 15.0),
+                        //         child: SizedBox(
+                        //           width:
+                        //           MediaQuery.of(context).size.width * .30,
+                        //           child: ElevatedButton(
+                        //               onPressed: () {},
+                        //               child: const Text('Call'),
+                        //               style: ElevatedButton.styleFrom(
+                        //                   shape: RoundedRectangleBorder(
+                        //                       borderRadius:
+                        //                       BorderRadius.circular(5.0)))),
+                        //         ))
+                        //   ],
+                        // ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .30,
+                              child: TextFormField(
+                                  controller: _originCardController,
+                                  enabled: false,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Source',
+                                  )),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .30,
+                              child: TextFormField(
+                                  controller: _destinationCardController,
+                                  enabled: false,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Destination',
+                                  )),
                             )
                           ],
-                        ),
-                        color: Colors.white,
-                        elevation: 4.0,
-                      ),
+                        )
+                      ],
                     ),
-                  ))
+                    color: Colors.white,
+                    elevation: 4.0,
+                  ),
+                ),
+              ))
         ])),
         floatingActionButton: !visibleText
             ? Visibility(
@@ -295,12 +341,10 @@ class _BookRideState extends State<BookRide> {
                 child: FloatingActionButton.extended(
                     onPressed: () {
                       removeTopMenu();
-
                     },
                     label: Text(buttonText),
                     icon: const Icon(Icons.car_rental)),
               ));
-
   }
 
   void _addMarker(LatLng originCrd, LatLng destinationCrd) async {
