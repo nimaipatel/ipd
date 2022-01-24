@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import "package:latlong/latlong.dart";
-
+import 'package:latlong2/latlong.dart';
 import 'package:blockchain_ridesharing/autocomplete_model.dart';
 import 'package:blockchain_ridesharing/autocomplete_repo.dart';
 

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:blockchain_ridesharing/.env.dart';
 import 'package:blockchain_ridesharing/directions_model.dart';
-import "package:latlong/latlong.dart";
+import 'package:latlong2/latlong.dart';
 
 class DirectionsRepository {
   static String _baseUrl =

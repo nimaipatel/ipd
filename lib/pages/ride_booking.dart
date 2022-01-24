@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import "package:latlong/latlong.dart";
+import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:blockchain_ridesharing/directions_repo.dart';
 import 'package:blockchain_ridesharing/directions_model.dart';
@@ -16,10 +16,15 @@ class BookRide extends StatefulWidget {
 }
 
 class _BookRideState extends State<BookRide> {
-  static final _initialCameraPosition = MapOptions(
+  final _initialCameraPosition = MapOptions(
     center: LatLng(19.0760, 72.8777),
     zoom: 11.5,
   );
+
+  late var _finalCameraPosition = MapOptions(center: LatLng(0, 0));
+
+  late MapController mapController = MapController();
+
   late Marker _origin;
   late Marker _destination;
 
@@ -34,7 +39,6 @@ class _BookRideState extends State<BookRide> {
   TextEditingController _originCardController = TextEditingController();
   TextEditingController _destinationCardController = TextEditingController();
 
-
   List<Marker> markerlist = [];
   List<LatLng> coordlist = [];
 
@@ -45,9 +49,6 @@ class _BookRideState extends State<BookRide> {
   String buttonText = "_addmarker";
 
   // Structure for Ride Struct for Blockchain
-
-
-
 
   @override
   void toggleState() {
@@ -73,6 +74,7 @@ class _BookRideState extends State<BookRide> {
         body: Container(
             child: Stack(children: [
           FlutterMap(
+            mapController: mapController,
             options: _initialCameraPosition,
             layers: [
               TileLayerOptions(
@@ -98,7 +100,7 @@ class _BookRideState extends State<BookRide> {
                   visible: visibleTopMenu,
                   child: Container(
                     decoration: const BoxDecoration(
-                        color: Colors.red,
+                        color: Color.fromARGB(255, 141, 203, 240),
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(15.0),
                             bottomRight: Radius.circular(15.0))),
@@ -119,11 +121,15 @@ class _BookRideState extends State<BookRide> {
                                         controller: _originController,
                                         onTap: () async {
                                           final res = await showSearch(
-                                              context: context, delegate: AutoSearch());
-                                          _originController.text = res!.predictionLocationsDescription[0];
-                                          _originCardController.text = res.predictionLocationsPlace[0];
+                                              context: context,
+                                              delegate: AutoSearch());
+                                          _originController.text = res!
+                                              .predictionLocationsDescription[0];
+                                          _originCardController.text =
+                                              res.predictionLocationsPlace[0];
                                           originCrd = res.predictionPoints[0];
-                                        }, // // Show the search delegate here
+                                        },
+                                        // // Show the search delegate here
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
                                           labelText: 'Source',
@@ -139,13 +145,17 @@ class _BookRideState extends State<BookRide> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: TextFormField(
-                                      controller: _destinationController,
+                                        controller: _destinationController,
                                         onTap: () async {
                                           final res = await showSearch(
-                                              context: context, delegate: AutoSearch());
-                                          _destinationController.text = res!.predictionLocationsDescription[0];
-                                          _destinationCardController.text = res.predictionLocationsPlace[0];
-                                          destinationCrd = res.predictionPoints[0];
+                                              context: context,
+                                              delegate: AutoSearch());
+                                          _destinationController.text = res!
+                                              .predictionLocationsDescription[0];
+                                          _destinationCardController.text =
+                                              res.predictionLocationsPlace[0];
+                                          destinationCrd =
+                                              res.predictionPoints[0];
                                         }, // the search delegate here
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
@@ -153,10 +163,10 @@ class _BookRideState extends State<BookRide> {
                                         ))))),
                         Visibility(
                             visible: visibleText,
-                            child: const Text("Estd Time")),
+                            child: const Text("Estimated Time")),
                         Visibility(
                             visible: visibleText,
-                            child: const Text("Estd Cost")),
+                            child: const Text("Estimated Cost")),
                       ],
                     ),
                   )),
@@ -165,121 +175,88 @@ class _BookRideState extends State<BookRide> {
               )
             ],
           ),
-              Visibility(
-                  visible: !visibleTopMenu,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .60,
-                        right: 20.0,
-                        left: 20.0),
-                    child: Container(
-                      height: 200.0,
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        child: Column(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5.0, horizontal: 15.0),
-                                child: Card(
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 15.0),
-                                        height: 75.0,
-                                        width: 75.0,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 10.0),
-                                        child: Column(
-
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: const [
-                                            Text("Rio Haryanto"),
-                                            Text("MH-XX-XX-XXXX"),
-                                            Text("Silver Toyota Innova")
-                                          ],
-                                        ),
-                                      ),
-                                      Column(
-                                        children: const [
-                                          Icon(Icons.call),
-                                          Icon(Icons.close)
-                                        ],
-                                      )
-                                    ],
+          Visibility(
+              visible: !visibleTopMenu,
+              child: Container(
+                alignment: Alignment.topCenter,
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * .60,
+                    right: 20.0,
+                    left: 20.0),
+                child: Container(
+                  height: 200.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5.0, horizontal: 15.0),
+                            child: Card(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 15.0),
+                                    height: 75.0,
+                                    width: 75.0,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red,
+                                    ),
                                   ),
-                                )),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            //   children: [
-                            //     Padding(
-                            //         padding: const EdgeInsets.symmetric(
-                            //             vertical: 10.0, horizontal: 15.0),
-                            //         child: SizedBox(
-                            //           width:
-                            //           MediaQuery.of(context).size.width * .30,
-                            //           child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text('Cancel'),
-                            //               style: ElevatedButton.styleFrom(
-                            //                   shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                       BorderRadius.circular(5.0)))),
-                            //         )),
-                            //     Padding(
-                            //         padding: const EdgeInsets.symmetric(
-                            //             vertical: 10.0, horizontal: 15.0),
-                            //         child: SizedBox(
-                            //           width:
-                            //           MediaQuery.of(context).size.width * .30,
-                            //           child: ElevatedButton(
-                            //               onPressed: () {},
-                            //               child: const Text('Call'),
-                            //               style: ElevatedButton.styleFrom(
-                            //                   shape: RoundedRectangleBorder(
-                            //                       borderRadius:
-                            //                       BorderRadius.circular(5.0)))),
-                            //         ))
-                            //   ],
-                            // ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * .30,
-                                  child: TextFormField(
-                                    controller: _originCardController,
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Source',
-                                      )),
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * .30,
-                                  child: TextFormField(
-                                    controller: _destinationCardController,
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Destination',
-                                      )),
-                                )
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text("Rio Haryanto"),
+                                        Text("MH-XX-XX-XXXX"),
+                                        Text("Silver Toyota Innova")
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    children: const [
+                                      Icon(Icons.call),
+                                      Icon(Icons.close)
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .30,
+                              child: TextFormField(
+                                  controller: _originCardController,
+                                  enabled: false,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Source',
+                                  )),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * .30,
+                              child: TextFormField(
+                                  controller: _destinationCardController,
+                                  enabled: false,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Destination',
+                                  )),
                             )
                           ],
-                        ),
-                        color: Colors.white,
-                        elevation: 4.0,
-                      ),
+                        )
+                      ],
                     ),
-                  ))
+                    color: Colors.white,
+                    elevation: 4.0,
+                  ),
+                ),
+              ))
         ])),
         floatingActionButton: !visibleText
             ? Visibility(
@@ -295,12 +272,10 @@ class _BookRideState extends State<BookRide> {
                 child: FloatingActionButton.extended(
                     onPressed: () {
                       removeTopMenu();
-
                     },
                     label: Text(buttonText),
                     icon: const Icon(Icons.car_rental)),
               ));
-
   }
 
   void _addMarker(LatLng originCrd, LatLng destinationCrd) async {
@@ -321,11 +296,20 @@ class _BookRideState extends State<BookRide> {
     markerlist.add(_origin);
     markerlist.add(_destination);
 
-    Directions _info;
     // Get directions
     final directions = await DirectionsRepository()
         .getDirections(origin: _origin.point, destination: _destination.point);
+    Directions _info;
+
     setState(() => _info = directions!);
     coordlist = directions!.polylinePoints;
+    var boundsCntrl = LatLngBounds.fromPoints(coordlist);
+    LatLng? _sw = boundsCntrl.southWest;
+    LatLng? _ne = boundsCntrl.northEast;
+
+    mapController.move(
+        LatLng((_sw!.latitude + _ne!.latitude) / 2,
+            (_sw.longitude + _ne.longitude) / 2),
+        12.0);
   }
 }

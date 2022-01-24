@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import "package:latlong/latlong.dart";
+import 'package:latlong2/latlong.dart';
 
 class Directions {
   // final LatLngBounds bounds;
@@ -35,7 +35,7 @@ class Directions {
     double duration = 0.0;
     List<PointLatLng> polylines = [];
     List<LatLng> latlist = [];
-    print(data);
+    // print(data);
     if ((data['legs'] as List).isNotEmpty) {
       final leg = data['legs'][0];
       distance = leg['distance'];

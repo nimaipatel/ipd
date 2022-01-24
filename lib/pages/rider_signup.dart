@@ -32,14 +32,20 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const Center(
-                child: Text(
-              "Let's Start By Creating Your Account.",
-              style: TextStyle(fontSize: 45.0, color: Colors.black),
-              textAlign: TextAlign.center,
+                child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+              child: Text(
+                "Let's Sign In To Our App.",
+                style: TextStyle(fontSize: 50.0, color: Colors.black),
+                textAlign: TextAlign.left,
+              ),
             )),
             Container(
-              color: Colors.grey,
-              margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 141, 203, 240),
+                  borderRadius: BorderRadius.circular(20.0)),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               padding: const EdgeInsets.only(top: 10.0),
               child: Form(
                   child: Column(
@@ -57,11 +63,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _firstNameController,
+                                  controller: _firstNameController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'First Name',
-                              ))))),
+                                    prefixIcon: Icon(Icons.badge),
+                                    border: InputBorder.none,
+                                    labelText: 'First Name',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -73,11 +80,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _lastNameController,
+                                  controller: _lastNameController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'Last Name',
-                              ))))),
+                                    prefixIcon: Icon(Icons.badge),
+                                    border: InputBorder.none,
+                                    labelText: 'Last Name',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -89,11 +97,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _emailController,
+                                  controller: _emailController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'Email Address',
-                              ))))),
+                                    prefixIcon: Icon(Icons.email),
+                                    border: InputBorder.none,
+                                    labelText: 'Email Address',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -105,11 +114,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _phoneNumberController,
+                                  controller: _phoneNumberController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'Phone Number',
-                              ))))),
+                                    prefixIcon: Icon(Icons.smartphone),
+                                    border: InputBorder.none,
+                                    labelText: 'Phone Number',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -121,11 +131,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _passwordController,
+                                  controller: _passwordController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'Password',
-                              ))))),
+                                    prefixIcon: Icon(Icons.vpn_key),
+                                    border: InputBorder.none,
+                                    labelText: 'Password',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -137,11 +148,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _cityController,
+                                  controller: _cityController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'City',
-                              ))))),
+                                    prefixIcon: Icon(Icons.add_location),
+                                    border: InputBorder.none,
+                                    labelText: 'City',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -153,11 +165,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _stateController,
+                                  controller: _stateController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'State',
-                              ))))),
+                                    prefixIcon: Icon(Icons.add_location),
+                                    border: InputBorder.none,
+                                    labelText: 'State',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -169,11 +182,12 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                controller: _countryController,
+                                  controller: _countryController,
                                   decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: 'Country',
-                              ))))),
+                                    prefixIcon: Icon(Icons.add_location),
+                                    border: InputBorder.none,
+                                    labelText: 'Country',
+                                  ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 30.0),
@@ -190,7 +204,7 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                                   const Size.fromHeight(50.0)),
                               shape: MaterialStateProperty.all(
                                   RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(0)))),
+                                      borderRadius: BorderRadius.circular(100.0)))),
                         ),
                       )),
                 ],
