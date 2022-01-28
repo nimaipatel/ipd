@@ -7,6 +7,13 @@ import 'package:blockchain_ridesharing/directions_model.dart';
 import 'package:blockchain_ridesharing/autocomplete_model.dart';
 import 'package:blockchain_ridesharing/autocomplete_repo.dart';
 import 'package:blockchain_ridesharing/search_delegate_options.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'package:blockchain_ridesharing/contract_linking.dart';
+
+// import 'package:blockchain_ridesharing/.env.dart/contract_linking.dart';
 
 class BookRide extends StatefulWidget {
   const BookRide({Key? key}) : super(key: key);
@@ -66,6 +73,7 @@ class _BookRideState extends State<BookRide> {
 
   @override
   Widget build(BuildContext context) {
+    var contractLink = Provider.of<ContractLinking>(context);
     return Scaffold(
         appBar: AppBar(
           title: const Text('Book Ride'),
@@ -219,9 +227,45 @@ class _BookRideState extends State<BookRide> {
                                     ),
                                   ),
                                   Column(
-                                    children: const [
-                                      Icon(Icons.call),
-                                      Icon(Icons.close)
+                                    children: [
+                                      /* Icon(Icons.call), */
+                                      /* Icon(Icons.close), */
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints.tightFor(
+                                            width: 30, height: 30),
+                                        child: ElevatedButton(
+                                          child: Text(
+                                            'Com',
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                          onPressed: () async {
+                                            await contractLink.initRideBlock();
+                                            await contractLink
+                                                .pairRiderDriver();
+                                            await contractLink.startRide();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: CircleBorder(),
+                                          ),
+                                        ),
+                                      ),
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints.tightFor(
+                                            width: 30, height: 30),
+                                        child: ElevatedButton(
+                                          child: Text(
+                                            'Con',
+                                            style: TextStyle(fontSize: 10),
+                                          ),
+                                          onPressed: () async {
+                                            contractLink.endRide();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: CircleBorder(),
+                                          ),
+                                        ),
+                                      ),
+                                      /* icon: Icon(Icons.car_rental)) */
                                     ],
                                   )
                                 ],

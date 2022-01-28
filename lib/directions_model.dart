@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:latlong2/latlong.dart';
+import "package:latlong2/latlong.dart";
 
 class Directions {
   // final LatLngBounds bounds;
@@ -42,12 +42,8 @@ class Directions {
       duration = leg['duration'];
       polylines = PolylinePoints().decodePolyline(data['geometry']);
 
-
-
-      for (var value in polylines){
-        latlist.add(
-            LatLng(value.latitude, value.longitude)
-        );
+      for (var value in polylines) {
+        latlist.add(LatLng(value.latitude, value.longitude));
         print(latlist);
       }
     }
