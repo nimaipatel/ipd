@@ -7,3 +7,9 @@ class AwaitingRider {
   AwaitingRider(
       this.name, this.projectedTime, this.fromLocation, this.toLocation);
 }
+
+class Ride{
+  late BigInt rideId;
+
+
+}

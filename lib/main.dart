@@ -1,3 +1,4 @@
+import 'package:blockchain_ridesharing/pages/driver_main.dart';
 import 'package:flutter/material.dart';
 import 'package:blockchain_ridesharing/pages/landing_page.dart';
 import 'package:blockchain_ridesharing/pages/rider_signup.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const LandingPage(),
+        '/': (context) => const DriverMainPage(),
         '/signup': (context) => const RiderRegistrationForm(),
         '/signin': (context) => const RiderLoginForm(),
         '/ridebook': (context) => const BookRide(),

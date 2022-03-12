@@ -231,10 +231,10 @@ class _BookRideState extends State<BookRide> {
                                       /* Icon(Icons.call), */
                                       /* Icon(Icons.close), */
                                       ConstrainedBox(
-                                        constraints: BoxConstraints.tightFor(
+                                        constraints: const BoxConstraints.tightFor(
                                             width: 30, height: 30),
                                         child: ElevatedButton(
-                                          child: Text(
+                                          child: const Text(
                                             'Com',
                                             style: TextStyle(fontSize: 10),
                                           ),
@@ -243,17 +243,18 @@ class _BookRideState extends State<BookRide> {
                                             await contractLink
                                                 .pairRiderDriver();
                                             await contractLink.startRide();
+                                            await contractLink.getRides();
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            shape: CircleBorder(),
+                                            shape: const CircleBorder(),
                                           ),
                                         ),
                                       ),
                                       ConstrainedBox(
-                                        constraints: BoxConstraints.tightFor(
+                                        constraints: const BoxConstraints.tightFor(
                                             width: 30, height: 30),
                                         child: ElevatedButton(
-                                          child: Text(
+                                          child: const Text(
                                             'Con',
                                             style: TextStyle(fontSize: 10),
                                           ),
@@ -261,7 +262,7 @@ class _BookRideState extends State<BookRide> {
                                             contractLink.endRide();
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            shape: CircleBorder(),
+                                            shape: const CircleBorder(),
                                           ),
                                         ),
                                       ),
@@ -305,17 +306,19 @@ class _BookRideState extends State<BookRide> {
         floatingActionButton: !visibleText
             ? Visibility(
                 child: FloatingActionButton.extended(
-                    onPressed: () {
+                    onPressed: () async {
                       _addMarker(originCrd, destinationCrd);
                       toggleState();
+                      // await contractLink.getRides();
                     },
-                    label: Text("buttonText"),
+                    label: const Text("buttonText"),
                     icon: const Icon(Icons.car_rental)))
             : Visibility(
                 visible: visibleTopMenu,
                 child: FloatingActionButton.extended(
-                    onPressed: () {
+                    onPressed: () async {
                       removeTopMenu();
+                      await contractLink.getRides();
                     },
                     label: Text(buttonText),
                     icon: const Icon(Icons.car_rental)),

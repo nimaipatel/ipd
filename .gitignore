@@ -46,6 +46,7 @@ app.*.map.json
 /android/app/release
 
 # Ignored Files
-/lib/pagesDep
-/lib/pages/map_page.dart
-/lib/.env.dart
+lib/pagesDep
+lib/pages/map_page.dart
+lib/.env.dart
+node_modules
