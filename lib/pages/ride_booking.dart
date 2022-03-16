@@ -231,8 +231,9 @@ class _BookRideState extends State<BookRide> {
                                       /* Icon(Icons.call), */
                                       /* Icon(Icons.close), */
                                       ConstrainedBox(
-                                        constraints: const BoxConstraints.tightFor(
-                                            width: 30, height: 30),
+                                        constraints:
+                                            const BoxConstraints.tightFor(
+                                                width: 30, height: 30),
                                         child: ElevatedButton(
                                           child: const Text(
                                             'Com',
@@ -251,8 +252,9 @@ class _BookRideState extends State<BookRide> {
                                         ),
                                       ),
                                       ConstrainedBox(
-                                        constraints: const BoxConstraints.tightFor(
-                                            width: 30, height: 30),
+                                        constraints:
+                                            const BoxConstraints.tightFor(
+                                                width: 30, height: 30),
                                         child: ElevatedButton(
                                           child: const Text(
                                             'Con',

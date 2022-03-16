@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:web3dart/credentials.dart';
 
 import '../contract_linking.dart';
 
@@ -46,8 +47,9 @@ class RideData {
 }
 
 class _DriverMainPageState extends State<DriverMainPage> {
-  final RideData _data = RideData();
+  // final RideData _data = RideData();
   List _rideList = [];
+  List _filteredRideList = [];
   @override
   Widget build(BuildContext context) {
     var contractLink = Provider.of<ContractLinking>(context);
@@ -59,12 +61,18 @@ class _DriverMainPageState extends State<DriverMainPage> {
         ),
         body: ListView.builder(
           padding: const EdgeInsets.all(5.5),
-          itemCount: _rideList.length,
+          itemCount: _filteredRideList.length,
           itemBuilder: _itemBuilder,
         ),
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
               _rideList = await contractLink.getRides();
+              for (var ride in _rideList) {
+                if (ride.driverAddress == EthereumAddress.fromHex("0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c")) {
+                  _filteredRideList.add(ride);
+                }
+              }
+
             },
             label: const Text("Refresh"),
             icon: const Icon(Icons.refresh)));
@@ -86,7 +94,7 @@ class _DriverMainPageState extends State<DriverMainPage> {
           ),
           Column(
             children:  [
-              Text("${_rideList[index].rideID}")
+              Text("${_filteredRideList[index].rideID}")
 
             ],
           )

@@ -113,7 +113,7 @@ class ContractLinking extends ChangeNotifier {
       Coordinates dropoffCoord = Coordinates(temp[5][0], temp[5][1]);
       rideList.add(Ride(temp[0], temp[1], temp[2], pickupCoord, dropoffCoord,
           temp[6], temp[7], temp[8], temp[9]));
-      print(temp[4]);
+      print(temp[2]);
       print(rideList[0]);
     }
     isLoading = false;
@@ -128,6 +128,8 @@ class ContractLinking extends ChangeNotifier {
         _credentials,
         Transaction.callContract(
             contract: _contract, function: _initRideBlock, parameters: []));
+
+    ridesCount++;
     isLoading = false;
     notifyListeners();
   }
@@ -136,7 +138,7 @@ class ContractLinking extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     // ridesCount = await getRideCount();
-    ridesCount++;
+    // ridesCount++;
     await _client.sendTransaction(
         _credentials,
         Transaction.callContract(
@@ -144,7 +146,7 @@ class ContractLinking extends ChangeNotifier {
             function: _pairRiderDriver,
             parameters: [
               EthereumAddress.fromHex(_driverAddress),
-              BigInt.from(ridesCount)
+              BigInt.from(ridesCount - 1)
             ]));
   }
 
@@ -173,7 +175,7 @@ class ContractLinking extends ChangeNotifier {
         Transaction.callContract(
             contract: _contract,
             function: _startRide,
-            parameters: [BigInt.from(ridesCount)]));
+            parameters: [BigInt.from(ridesCount - 1)]));
   }
 
   endRide() async {
@@ -186,7 +188,7 @@ class ContractLinking extends ChangeNotifier {
             contract: _contract,
             function: _endRide,
             parameters: [
-              BigInt.from(ridesCount),
+              BigInt.from(ridesCount - 1),
               EthereumAddress.fromHex(_driverAddress),
             ]));
   }

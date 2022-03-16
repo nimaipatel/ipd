@@ -87,7 +87,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -100,7 +101,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -156,7 +158,8 @@
       "name": "endRide",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.12+commit.f00d7308\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"name\":\"Rides\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"rideId\",\"type\":\"int256\"},{\"internalType\":\"address\",\"name\":\"riderAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"driverAddress\",\"type\":\"address\"},{\"internalType\":\"enum Main.RideStatus\",\"name\":\"rideState\",\"type\":\"uint8\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"latitude\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"longitude\",\"type\":\"int256\"}],\"internalType\":\"struct Main.coordinates\",\"name\":\"pickupLocation\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"latitude\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"longitude\",\"type\":\"int256\"}],\"internalType\":\"struct Main.coordinates\",\"name\":\"dropoffLocation\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"bookingTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"rideStartTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"rideEndTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"rideCost\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"rideNo\",\"type\":\"int256\"},{\"internalType\":\"address payable\",\"name\":\"transferAddress\",\"type\":\"address\"}],\"name\":\"endRide\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"initRideBlock\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address payable\",\"name\":\"_driverAddress\",\"type\":\"address\"},{\"internalType\":\"int256\",\"name\":\"rideNo\",\"type\":\"int256\"}],\"name\":\"pairRiderDriver\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rideCount\",\"outputs\":[{\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"int256\",\"name\":\"rideNo\",\"type\":\"int256\"}],\"name\":\"startRide\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Main.sol\":\"Main\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Main.sol\":{\"keccak256\":\"0x40016853604767a7e4622a59adbdb91226092dfb376a98dd0922103965919dce\",\"urls\":[\"bzz-raw://459ddd4fa82028f634d8127da37db9ccb8c228ef0773aa45bb024f8edffe879f\",\"dweb:/ipfs/QmYhHaeubSGBwTmBJHaaD3aTvruGeQphox7MxzEq6C1pKc\"]}},\"version\":1}",
@@ -8694,12 +8697,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xB76AC69D39A0129405Fb592061B3665234DF0c2B",
-      "transactionHash": "0xc5a85033fc756df6c7a488b53e2f6cbcff11d7d8725cdd197f7ea48ffe040a50"
+      "address": "0xfeaE85CeF0D3f22Cd49ce3230405E4A7452014D7",
+      "transactionHash": "0xe3a65150f7afc5c62222276f5f9a1219d7d6e7defc5466554cc7d91dd2625432"
     }
   },
   "schemaVersion": "3.4.5",
-  "updatedAt": "2022-03-11T16:33:02.775Z",
+  "updatedAt": "2022-03-16T14:01:25.003Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
