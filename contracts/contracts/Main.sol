@@ -15,11 +15,12 @@ contract Main{
     
     int256 public rideCount = 0;
     mapping (int256 => Ride) public Rides;
-    
-    struct coordinates{
-        int256 latitude;
-        int256 longitude;
-    }
+    // int256 public constant RES = 100000;
+
+        struct coordinates{
+            int256 latitude;
+            int256 longitude;
+        }
     
     struct Ride{
         int256 rideId;
@@ -34,21 +35,21 @@ contract Main{
         uint256 rideCost;
     }
     
-    function initRideBlock() public{
-        Rides[rideCount] = Ride({
-            rideId : rideCount,
-            riderAddress: msg.sender,
-            driverAddress: 0x0000000000000000000000000000000000000000,
-            rideState : RideStatus.Booked, 
-            pickupLocation: coordinates({latitude: 0, longitude: 0}),
-            dropoffLocation: coordinates({latitude: 0, longitude: 0}),
-            bookingTime: block.timestamp,
-            rideStartTime: 0,
-            rideEndTime: 0,
-            rideCost: 1 ether
-        });
-        rideCount += 1;
-    }
+    function initRideBlock(int256 pickupLat, int256 pickupLong, int256 dropoffLat, int256 dropoffLong) public{
+            Rides[rideCount] = Ride({
+                rideId : rideCount,
+                riderAddress: msg.sender,
+                driverAddress: 0x0000000000000000000000000000000000000000,
+                rideState : RideStatus.Booked,
+                pickupLocation: coordinates({latitude: pickupLat, longitude: pickupLong}),
+                dropoffLocation: coordinates({latitude: dropoffLat, longitude: dropoffLong}),
+                bookingTime: block.timestamp,
+                rideStartTime: 0,
+                rideEndTime: 0,
+                rideCost: 1 ether
+            });
+            rideCount += 1;
+        }
     
     function pairRiderDriver(address payable _driverAddress, int256 rideNo) public{
         require(Rides[rideNo].driverAddress == 0x0000000000000000000000000000000000000000);

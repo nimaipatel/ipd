@@ -1,9 +1,10 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
-
+import 'package:blockchain_ridesharing/riders.dart';
 import 'package:flutter/cupertino.dart' show ChangeNotifier;
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' show Client;
+import 'package:latlong2/latlong.dart';
 import 'package:web3dart/web3dart.dart'
     show
         ContractAbi,
@@ -95,7 +96,7 @@ class ContractLinking extends ChangeNotifier {
   getRideCount() async {
     rideList = await _client
         .call(contract: _contract, function: _rideCount, params: []);
-    BigInt totalRides = rideList[0];
+    var totalRides = rideList[0];
     ridesCount = totalRides.toInt();
     print(ridesCount);
     return ridesCount;
@@ -109,11 +110,12 @@ class ContractLinking extends ChangeNotifier {
     for (var i = 0; i < ridesCount.toInt(); i++) {
       var temp = await _client.call(
           contract: _contract, function: _Rides, params: [BigInt.from(i)]);
-      Coordinates pickupCoord = Coordinates(temp[4][0], temp[4][1]);
-      Coordinates dropoffCoord = Coordinates(temp[5][0], temp[5][1]);
+      print(temp[4][0] is BigInt);
+      Coordinates pickupCoord = Coordinates((temp[4][0]).toInt()/100000, (temp[4][1]).toInt()/100000.toDouble());
+      Coordinates dropoffCoord = Coordinates((temp[5][0].toInt())/100000.toDouble(), (temp[5][1].toInt())/100000.toDouble());
       rideList.add(Ride(temp[0], temp[1], temp[2], pickupCoord, dropoffCoord,
           temp[6], temp[7], temp[8], temp[9]));
-      print(temp[2]);
+      print(pickupCoord);
       print(rideList[0]);
     }
     isLoading = false;
@@ -121,20 +123,28 @@ class ContractLinking extends ChangeNotifier {
     return rideList;
   }
 
-  initRideBlock() async {
+  initRideBlock(LatLng originCrd, LatLng destinationCrd) async {
     isLoading = true;
     notifyListeners();
+    await getRides();
     await _client.sendTransaction(
         _credentials,
         Transaction.callContract(
-            contract: _contract, function: _initRideBlock, parameters: []));
+            contract: _contract,
+            function: _initRideBlock,
+            parameters: [
+              BigInt.from((originCrd.latitude) * 100000),
+              BigInt.from((originCrd.longitude) * 100000),
+              BigInt.from((destinationCrd.latitude) * 100000),
+              BigInt.from((destinationCrd.longitude) * 100000)
+            ]));
 
     ridesCount++;
     isLoading = false;
     notifyListeners();
   }
 
-  pairRiderDriver() async {
+  pairRiderDriver(EthereumAddress _driverAddress) async {
     isLoading = true;
     notifyListeners();
     // ridesCount = await getRideCount();
@@ -145,7 +155,8 @@ class ContractLinking extends ChangeNotifier {
             contract: _contract,
             function: _pairRiderDriver,
             parameters: [
-              EthereumAddress.fromHex(_driverAddress),
+              // EthereumAddress.fromHex(_driverAddress),
+              _driverAddress,
               BigInt.from(ridesCount - 1)
             ]));
   }
@@ -196,34 +207,6 @@ class ContractLinking extends ChangeNotifier {
 
 enum RideStatus { Booked, InProgress, Completed, Cancelled }
 
-class Coordinates {
-  BigInt latitude;
-  BigInt longitude;
 
-  Coordinates(this.latitude, this.longitude);
-}
 
-class Ride {
-  BigInt rideID;
-  EthereumAddress riderAddress;
-  EthereumAddress driverAddress;
-  // RideStatus rideState;
-  Coordinates pickupLocation;
-  Coordinates dropoffLocation;
-  BigInt bookingTime;
-  BigInt rideStartTime;
-  BigInt rideEndTime;
-  BigInt rideCost;
 
-  Ride(
-      this.rideID,
-      this.riderAddress,
-      this.driverAddress,
-      // this.rideState,
-      this.pickupLocation,
-      this.dropoffLocation,
-      this.bookingTime,
-      this.rideStartTime,
-      this.rideEndTime,
-      this.rideCost);
-}

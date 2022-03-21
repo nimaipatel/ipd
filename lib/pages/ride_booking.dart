@@ -1,17 +1,16 @@
+import 'package:blockchain_ridesharing/riders.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:blockchain_ridesharing/directions_repo.dart';
 import 'package:blockchain_ridesharing/directions_model.dart';
 import 'package:blockchain_ridesharing/autocomplete_model.dart';
-import 'package:blockchain_ridesharing/autocomplete_repo.dart';
 import 'package:blockchain_ridesharing/search_delegate_options.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'dart:convert';
 import 'package:blockchain_ridesharing/contract_linking.dart';
+
+import 'choose_driver.dart';
 
 // import 'package:blockchain_ridesharing/.env.dart/contract_linking.dart';
 
@@ -54,7 +53,7 @@ class _BookRideState extends State<BookRide> {
   bool visibleTopMenu = true;
 
   String buttonText = "_addmarker";
-
+  late Driver selectedDriver;
   // Structure for Ride Struct for Blockchain
 
   @override
@@ -69,6 +68,16 @@ class _BookRideState extends State<BookRide> {
     setState(() {
       visibleTopMenu = false;
     });
+  }
+
+  // Async function to navigate to driver select page
+  Future<Driver> selectDriverMenu(BuildContext context) async {
+    final selectedDriver = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ChooseDriver()),
+    );
+
+    return selectedDriver;
   }
 
   @override
@@ -219,10 +228,10 @@ class _BookRideState extends State<BookRide> {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
-                                        Text("Rio Haryanto"),
-                                        Text("MH-XX-XX-XXXX"),
-                                        Text("Silver Toyota Innova")
+                                      children: visibleTopMenu ? [] : [
+                                        Text(selectedDriver.driverName),
+                                        Text(selectedDriver.carRegistration),
+                                        Text(selectedDriver.carMake)
                                       ],
                                     ),
                                   ),
@@ -240,9 +249,10 @@ class _BookRideState extends State<BookRide> {
                                             style: TextStyle(fontSize: 10),
                                           ),
                                           onPressed: () async {
-                                            await contractLink.initRideBlock();
-                                            await contractLink
-                                                .pairRiderDriver();
+                                            // await contractLink.initRideBlock(
+                                            //     originCrd, destinationCrd
+                                            // );
+
                                             await contractLink.startRide();
                                             await contractLink.getRides();
                                           },
@@ -310,8 +320,11 @@ class _BookRideState extends State<BookRide> {
                 child: FloatingActionButton.extended(
                     onPressed: () async {
                       _addMarker(originCrd, destinationCrd);
-                      toggleState();
                       // await contractLink.getRides();
+                      await contractLink.initRideBlock(
+                          originCrd, destinationCrd);
+                      toggleState();
+                      //
                     },
                     label: const Text("buttonText"),
                     icon: const Icon(Icons.car_rental)))
@@ -319,8 +332,10 @@ class _BookRideState extends State<BookRide> {
                 visible: visibleTopMenu,
                 child: FloatingActionButton.extended(
                     onPressed: () async {
+                      // removeTopMenu();
+                      // await contractLink.getRides();
+                      selectedDriver = await selectDriverMenu(context);
                       removeTopMenu();
-                      await contractLink.getRides();
                     },
                     label: Text(buttonText),
                     icon: const Icon(Icons.car_rental)),
