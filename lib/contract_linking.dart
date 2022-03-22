@@ -6,16 +6,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' show Client;
 import 'package:latlong2/latlong.dart';
 import 'package:web3dart/web3dart.dart'
-    show
-        ContractAbi,
-        ContractEvent,
-        ContractFunction,
-        Credentials,
-        DeployedContract,
-        EthereumAddress,
-        FilterOptions,
-        Transaction,
-        Web3Client;
+    show ContractAbi, ContractEvent, ContractFunction, Credentials, DeployedContract, EthPrivateKey, EtherAmount, EthereumAddress, FilterOptions, Transaction, Wallet, Web3Client;
+import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart' show IOWebSocketChannel;
 
 class ContractLinking extends ChangeNotifier {
@@ -25,6 +17,7 @@ class ContractLinking extends ChangeNotifier {
       "452a1e3f893f88db62dfe874ac2356885306cbb9beabf69becd6f4341dd7954c";
   final String _driverAddress = "0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c";
 
+
   late Web3Client _client;
   late bool isLoading = false;
 
@@ -32,6 +25,7 @@ class ContractLinking extends ChangeNotifier {
   late EthereumAddress _contractAddress;
 
   late Credentials _credentials;
+  late EthPrivateKey _ethKey;
 
   late DeployedContract _contract;
   /* late ContractFunction _addDriver; */
@@ -75,6 +69,7 @@ class ContractLinking extends ChangeNotifier {
 
   Future<void> getCredentials() async {
     _credentials = await _client.credentialsFromPrivateKey(_riderSK);
+    _ethKey = EthPrivateKey.fromHex(_riderSK);
   }
 
   Future<void> getDeployedContract() async {
@@ -110,14 +105,15 @@ class ContractLinking extends ChangeNotifier {
     for (var i = 0; i < ridesCount.toInt(); i++) {
       var temp = await _client.call(
           contract: _contract, function: _Rides, params: [BigInt.from(i)]);
-      print(temp[4][0] is BigInt);
+      // print(temp[4][0] is BigInt);
       Coordinates pickupCoord = Coordinates((temp[4][0]).toInt()/100000, (temp[4][1]).toInt()/100000.toDouble());
       Coordinates dropoffCoord = Coordinates((temp[5][0].toInt())/100000.toDouble(), (temp[5][1].toInt())/100000.toDouble());
       rideList.add(Ride(temp[0], temp[1], temp[2], pickupCoord, dropoffCoord,
           temp[6], temp[7], temp[8], temp[9]));
-      print(pickupCoord);
-      print(rideList[0]);
+      // print(pickupCoord);
+      // print(rideList[0]);
     }
+
     isLoading = false;
     notifyListeners();
     return rideList;
@@ -147,40 +143,23 @@ class ContractLinking extends ChangeNotifier {
   pairRiderDriver(EthereumAddress _driverAddress) async {
     isLoading = true;
     notifyListeners();
-    // ridesCount = await getRideCount();
-    // ridesCount++;
+
     await _client.sendTransaction(
         _credentials,
         Transaction.callContract(
             contract: _contract,
             function: _pairRiderDriver,
             parameters: [
-              // EthereumAddress.fromHex(_driverAddress),
               _driverAddress,
               BigInt.from(ridesCount - 1)
             ]));
   }
 
-  // Listen to event trial
-  // listenPairRiderDriverEvent() async{
-  //   final subscription = _client
-  //       .events(FilterOptions.events(contract: _contract, event: _transferEvent))
-  //       .take(1)
-  //       .listen((event) {
-  //     final decoded = _transferEvent.decodeResults(event.topics, event.data);
-  //
-  //     final from = decoded[0] as EthereumAddress;
-  //     final to = decoded[1] as EthereumAddress;
-  //     final value = decoded[2] as BigInt;
-  //
-  //     print('$from sent $value MetaCoins to $to');
-  //   });
-  // }
 
   startRide() async {
     isLoading = true;
     notifyListeners();
-    // ridesCount = await getRideCount();
+
     await _client.sendTransaction(
         _credentials,
         Transaction.callContract(
@@ -189,15 +168,17 @@ class ContractLinking extends ChangeNotifier {
             parameters: [BigInt.from(ridesCount - 1)]));
   }
 
+  // Added value parameter to callContract, make sure to fix final parts
   endRide() async {
     isLoading = true;
     notifyListeners();
-    // ridesCount = await getRideCount();
+
     await _client.sendTransaction(
         _credentials,
         Transaction.callContract(
             contract: _contract,
             function: _endRide,
+            value: EtherAmount.fromUnitAndValue(EtherUnit.ether, 1),
             parameters: [
               BigInt.from(ridesCount - 1),
               EthereumAddress.fromHex(_driverAddress),

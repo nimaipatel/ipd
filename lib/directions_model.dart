@@ -22,13 +22,6 @@ class Directions {
     // Get route information
     final data = Map<String, dynamic>.from(map['routes'][0]);
 
-    // // Bounds
-    // final northeast = data['bounds']['northeast'];
-    // final southwest = data['bounds']['southwest'];
-    // final bounds = LatLngBounds(
-    //   northeast: LatLng(northeast['lat'], northeast['lng']),
-    //   southwest: LatLng(southwest['lat'], southwest['lng']),
-    // );
 
     // Distance & Duration
     double distance = 0.0;
