@@ -44,7 +44,7 @@ class Directions {
 
       for (var value in polylines) {
         latlist.add(LatLng(value.latitude, value.longitude));
-        print(latlist);
+        // print(latlist);
       }
     }
 

@@ -88,8 +88,7 @@ class _BookRideState extends State<BookRide> {
           title: const Text('Book Ride'),
           centerTitle: true,
         ),
-        body: Container(
-            child: Stack(children: [
+        body: Stack(children: [
           FlutterMap(
             mapController: mapController,
             options: _initialCameraPosition,
@@ -228,11 +227,14 @@ class _BookRideState extends State<BookRide> {
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: visibleTopMenu ? [] : [
-                                        Text(selectedDriver.driverName),
-                                        Text(selectedDriver.carRegistration),
-                                        Text(selectedDriver.carMake)
-                                      ],
+                                      children: visibleTopMenu
+                                          ? []
+                                          : [
+                                              Text(selectedDriver.driverName),
+                                              Text(selectedDriver
+                                                  .carRegistration),
+                                              Text(selectedDriver.carMake)
+                                            ],
                                     ),
                                   ),
                                   Column(
@@ -314,7 +316,7 @@ class _BookRideState extends State<BookRide> {
                   ),
                 ),
               ))
-        ])),
+        ]),
         floatingActionButton: !visibleText
             ? Visibility(
                 child: FloatingActionButton.extended(
@@ -368,12 +370,14 @@ class _BookRideState extends State<BookRide> {
     setState(() => _info = directions!);
     coordlist = directions!.polylinePoints;
     var boundsCntrl = LatLngBounds.fromPoints(coordlist);
-    LatLng? _sw = boundsCntrl.southWest;
-    LatLng? _ne = boundsCntrl.northEast;
+    // LatLng? _sw = boundsCntrl.southWest;
+    // LatLng? _ne = boundsCntrl.northEast;
 
-    mapController.move(
-        LatLng((_sw!.latitude + _ne!.latitude) / 2,
-            (_sw.longitude + _ne.longitude) / 2),
-        12.0);
+    // mapController.move(
+    //     LatLng((_sw!.latitude + _ne!.latitude) / 2,
+    //         (_sw.longitude + _ne.longitude) / 2),
+    //     10.0);
+
+    mapController.fitBounds(boundsCntrl);
   }
 }

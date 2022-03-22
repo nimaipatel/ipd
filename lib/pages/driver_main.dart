@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:web3dart/credentials.dart';
-
 import '../contract_linking.dart';
 
 class DriverMainPage extends StatefulWidget {
@@ -12,48 +11,12 @@ class DriverMainPage extends StatefulWidget {
   _DriverMainPageState createState() => _DriverMainPageState();
 }
 
-class RideData {
-  Map fetchedData = {
-    "rides": [
-      {
-        "rideId": "1",
-        "riderAddress": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
-        "pickupLocation": "Goregaon East",
-        "dropoffLocation": "Marine Drive",
-        "pickupLocationLatitude": "",
-        "pickupLocationLongitude": "",
-        "dropoffLocationLatitude": "",
-        "dropoffLocationLongitude": ""
-      }
-    ]
-  };
-
-  late List _data;
-  RideData() {
-    _data = fetchedData["rides"];
-  }
-
-  String getId(int index) {
-    return _data[index]["pickupLocation"];
-  }
-
-  String getName(int index) {
-    return _data[index]["riderAddress"];
-  }
-
-  int getLength() {
-    return _data.length;
-  }
-}
-
 class _DriverMainPageState extends State<DriverMainPage> {
-  // final RideData _data = RideData();
   List _rideList = [];
   List _filteredRideList = [];
   @override
   Widget build(BuildContext context) {
     var contractLink = Provider.of<ContractLinking>(context);
-    // _rideList = contractLink.getRides();
     return Scaffold(
         appBar: AppBar(
           title: const Text('Driver Main'),
@@ -68,11 +31,12 @@ class _DriverMainPageState extends State<DriverMainPage> {
             onPressed: () async {
               _rideList = await contractLink.getRides();
               for (var ride in _rideList) {
-                if (ride.driverAddress == EthereumAddress.fromHex("0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c")) {
+                if (ride.driverAddress ==
+                    EthereumAddress.fromHex(
+                        "0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c")) {
                   _filteredRideList.add(ride);
                 }
               }
-
             },
             label: const Text("Refresh"),
             icon: const Icon(Icons.refresh)));
@@ -93,19 +57,17 @@ class _DriverMainPageState extends State<DriverMainPage> {
             ),
           ),
           Column(
-            children:  [
-              Text("${_filteredRideList[index].rideID}")
-
-            ],
+            children: [Text("${_filteredRideList[index].rideID}")],
           ),
           Padding(
-          padding: const EdgeInsets.all(8.0),
-    child: ElevatedButton(
-    onPressed: () {
-    // Pop here with "Nope"...
-    },
-    child: const Text('Nope.'),
-    ),)
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // Pop here with "Nope"...
+              },
+              child: const Text('Nope.'),
+            ),
+          )
         ],
       ),
     );
