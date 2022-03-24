@@ -15,7 +15,7 @@ class ContractLinking extends ChangeNotifier {
   final String _wsUrl = "ws://10.0.2.2:7545/";
   final String _riderSK =
       "452a1e3f893f88db62dfe874ac2356885306cbb9beabf69becd6f4341dd7954c";
-  final String _driverAddress = "0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c";
+  final String _driverAddress = "0xE556AbdEcC3C89820e53dD379547070817f55472";
 
 
   late Web3Client _client;

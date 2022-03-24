@@ -10,7 +10,6 @@ import 'dart:async';
 import 'package:blockchain_ridesharing/contract_linking.dart';
 import 'choose_driver.dart';
 
-
 class BookRide extends StatefulWidget {
   const BookRide({Key? key}) : super(key: key);
 
@@ -25,6 +24,7 @@ class _BookRideState extends State<BookRide> {
   );
 
   late MapController mapController = MapController();
+  late LatLngBounds boundsCntrl;
 
   late Marker _origin;
   late Marker _destination;
@@ -66,6 +66,9 @@ class _BookRideState extends State<BookRide> {
   void removeTopMenu() {
     setState(() {
       visibleTopMenu = false;
+      mapController.fitBounds(boundsCntrl,
+          options: const FitBoundsOptions(
+              padding: EdgeInsets.only(top: 0, bottom: 150)));
     });
   }
 
@@ -75,7 +78,9 @@ class _BookRideState extends State<BookRide> {
       context,
       MaterialPageRoute(builder: (context) => const ChooseDriver()),
     );
-
+    mapController.fitBounds(boundsCntrl,
+        options: const FitBoundsOptions(
+            padding: EdgeInsets.only(top: 50, bottom: 100)));
     return selectedDriver;
   }
 
@@ -177,156 +182,173 @@ class _BookRideState extends State<BookRide> {
                   )
                 ],
               ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: FlutterMap(
-                  mapController: mapController,
-                  options: _initialCameraPosition,
-                  layers: [
-                    TileLayerOptions(
-                      urlTemplate:
-                          "https://api.mapbox.com/styles/v1/nike1421/ckwxapwvdgnaq14p4s3q7fbxp/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmlrZTE0MjEiLCJhIjoiY2t3eGE2cjkzMGJ3YjJ2bGF2YnB1bDlrNyJ9.9-2Wtpza6YIuPDyhpCpzSA",
-                      additionalOptions: {
-                        'accessToken':
-                            "pk.eyJ1IjoibmlrZTE0MjEiLCJhIjoiY2t3eGE2cjkzMGJ3YjJ2bGF2YnB1bDlrNyJ9.9-2Wtpza6YIuPDyhpCpzSA",
-                        'id': "mapbox.mapbox-streets-v8"
-                      },
+              Stack(
+                children: [
+                  Container(
+                    height: visibleTopMenu
+                        ? MediaQuery.of(context).size.height * 0.7
+                        : MediaQuery.of(context).size.height,
+                    child: FlutterMap(
+                      mapController: mapController,
+                      options: _initialCameraPosition,
+                      layers: [
+                        TileLayerOptions(
+                          urlTemplate:
+                              "https://api.mapbox.com/styles/v1/nike1421/ckwxapwvdgnaq14p4s3q7fbxp/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmlrZTE0MjEiLCJhIjoiY2t3eGE2cjkzMGJ3YjJ2bGF2YnB1bDlrNyJ9.9-2Wtpza6YIuPDyhpCpzSA",
+                          additionalOptions: {
+                            'accessToken':
+                                "pk.eyJ1IjoibmlrZTE0MjEiLCJhIjoiY2t3eGE2cjkzMGJ3YjJ2bGF2YnB1bDlrNyJ9.9-2Wtpza6YIuPDyhpCpzSA",
+                            'id': "mapbox.mapbox-streets-v8"
+                          },
+                        ),
+                        MarkerLayerOptions(
+                          markers: !visibleText ? [] : markerlist,
+                        ),
+                        PolylineLayerOptions(polylines: [
+                          Polyline(
+                              points: coordlist,
+                              strokeWidth: 5.0,
+                              color: Colors.red)
+                        ])
+                      ],
                     ),
-                    MarkerLayerOptions(
-                      markers: visibleText ? [] : markerlist,
-                    ),
-                    PolylineLayerOptions(polylines: [
-                      Polyline(
-                          points: coordlist,
-                          strokeWidth: 5.0,
-                          color: Colors.red)
-                    ])
-                  ],
-                ),
-              ),
-              Visibility(
-                  visible: !visibleTopMenu,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .60,
-                        right: 20.0,
-                        left: 20.0),
-                    child: Container(
-                      height: 200.0,
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        child: Column(
-                          children: [
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5.0, horizontal: 15.0),
-                                child: Card(
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 15.0),
-                                        height: 75.0,
-                                        width: 75.0,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 10.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: visibleTopMenu
-                                              ? []
-                                              : [
-                                                  Text(selectedDriver
-                                                      .driverName),
-                                                  Text(selectedDriver
-                                                      .carRegistration),
-                                                  Text(selectedDriver.carMake)
-                                                ],
-                                        ),
-                                      ),
-                                      Column(
-                                        children: [
-
-                                          ConstrainedBox(
-                                            constraints:
-                                                const BoxConstraints.tightFor(
-                                                    width: 30, height: 30),
-                                            child: ElevatedButton(
-                                              child: const Text(
-                                                'Com',
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                              onPressed: () async {
-                                                await contractLink.startRide();
-                                                await contractLink.getRides();
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: const CircleBorder(),
-                                              ),
-                                            ),
-                                          ),
-                                          ConstrainedBox(
-                                            constraints:
-                                                const BoxConstraints.tightFor(
-                                                    width: 30, height: 30),
-                                            child: ElevatedButton(
-                                              child: const Text(
-                                                'Con',
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                              onPressed: () async {
-                                                contractLink.endRide();
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                shape: const CircleBorder(),
-                                              ),
-                                            ),
-                                          ),
-
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                  Visibility(
+                      visible: !visibleTopMenu,
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * .60,
+                            right: 20.0,
+                            left: 20.0),
+                        child: Container(
+                          height: 200.0,
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            child: Column(
                               children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * .30,
-                                  child: TextFormField(
-                                      controller: _originCardController,
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Source',
-                                      )),
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * .30,
-                                  child: TextFormField(
-                                      controller: _destinationCardController,
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Destination',
-                                      )),
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5.0, horizontal: 15.0),
+                                    child: Card(
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 15.0),
+                                            height: 75.0,
+                                            width: 75.0,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 10.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: visibleTopMenu
+                                                  ? []
+                                                  : [
+                                                      Text(selectedDriver
+                                                          .driverName),
+                                                      Text(selectedDriver
+                                                          .carRegistration),
+                                                      Text(selectedDriver
+                                                          .carMake)
+                                                    ],
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              ConstrainedBox(
+                                                constraints:
+                                                    const BoxConstraints
+                                                            .tightFor(
+                                                        width: 30, height: 30),
+                                                child: ElevatedButton(
+                                                  child: const Text(
+                                                    'Com',
+                                                    style:
+                                                        TextStyle(fontSize: 10),
+                                                  ),
+                                                  onPressed: () async {
+                                                    await contractLink
+                                                        .startRide();
+                                                    await contractLink
+                                                        .getRides();
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    shape: const CircleBorder(),
+                                                  ),
+                                                ),
+                                              ),
+                                              ConstrainedBox(
+                                                constraints:
+                                                    const BoxConstraints
+                                                            .tightFor(
+                                                        width: 30, height: 30),
+                                                child: ElevatedButton(
+                                                  child: const Text(
+                                                    'Con',
+                                                    style:
+                                                        TextStyle(fontSize: 10),
+                                                  ),
+                                                  onPressed: () async {
+                                                    contractLink.endRide();
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    shape: const CircleBorder(),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    )),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .30,
+                                      child: TextFormField(
+                                          controller: _originCardController,
+                                          enabled: false,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Source',
+                                          )),
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .30,
+                                      child: TextFormField(
+                                          controller:
+                                              _destinationCardController,
+                                          enabled: false,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Destination',
+                                          )),
+                                    )
+                                  ],
                                 )
                               ],
-                            )
-                          ],
+                            ),
+                            color: Colors.white,
+                            elevation: 4.0,
+                          ),
                         ),
-                        color: Colors.white,
-                        elevation: 4.0,
-                      ),
-                    ),
-                  ))
+                      ))
+                ],
+              )
             ],
           ),
         ),
@@ -346,7 +368,6 @@ class _BookRideState extends State<BookRide> {
                 visible: visibleTopMenu,
                 child: FloatingActionButton.extended(
                     onPressed: () async {
-
                       selectedDriver = await selectDriverMenu(context);
                       removeTopMenu();
                     },
@@ -381,10 +402,9 @@ class _BookRideState extends State<BookRide> {
     rideDuration = directions.totalDuration;
     rideDistance = directions.totalDistance;
 
-    var boundsCntrl = LatLngBounds.fromPoints(coordlist);
+    boundsCntrl = LatLngBounds.fromPoints(coordlist);
     mapController.fitBounds(boundsCntrl,
         options: const FitBoundsOptions(
             padding: EdgeInsets.only(top: 50, bottom: 100)));
-
   }
 }
