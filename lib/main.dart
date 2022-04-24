@@ -1,5 +1,6 @@
 import 'package:blockchain_ridesharing/pages/choose_driver.dart';
 import 'package:blockchain_ridesharing/pages/driver_main.dart';
+import 'package:blockchain_ridesharing/pages/ride_ended.dart';
 import 'package:flutter/material.dart';
 import 'package:blockchain_ridesharing/pages/landing_page.dart';
 import 'package:blockchain_ridesharing/pages/rider_signup.dart';

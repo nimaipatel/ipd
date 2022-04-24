@@ -28,8 +28,6 @@ class ContractLinking extends ChangeNotifier {
   late EthPrivateKey _ethKey;
 
   late DeployedContract _contract;
-  /* late ContractFunction _addDriver; */
-  /* late ContractFunction _driverPool; */
   late ContractFunction _rideCount;
   late ContractFunction _Rides;
 
@@ -76,9 +74,6 @@ class ContractLinking extends ChangeNotifier {
     _contract = DeployedContract(
         ContractAbi.fromJson(_abiCode, "Main"), _contractAddress);
 
-    // Extracting the functions, declared in contract.
-    /* _addDriver = _contract.function("addDriver"); */
-    /* _driverPool = _contract.function("driverPool"); */
     _rideCount = _contract.function("rideCount");
     _Rides = _contract.function("Rides");
 
