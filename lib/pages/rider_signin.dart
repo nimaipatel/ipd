@@ -108,9 +108,9 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Navigator.pushNamed(context, '/ridebook');
+            Navigator.pushNamed(context, '/drivermain');
           },
-          label: const Text("Ride Book Page"),
+          label: const Text("Driver Main Page"),
           icon: const Icon(Icons.car_rental)),
     );
   }
