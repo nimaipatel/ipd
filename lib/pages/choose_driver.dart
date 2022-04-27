@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../riders.dart';
 import '../contract_linking.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +53,31 @@ class _ChooseDriverState extends State<ChooseDriver> {
   late Driver chosenDriver;
   late List fetchedData;
   late int dataLength = 0;
+  late int riderLat = 100;
+  late int riderLong = 100;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //getRidersLocation();
+  }
+
+  Future<void> getRidersLocation() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // await prefs.setInt('riderLat', 100);
+    // await prefs.setInt('riderLong', 100);
+
+    var lat = prefs.getInt('lat');
+    var long = prefs.getInt('long');
+
+    setState(() {
+      riderLat = lat!;
+      riderLong = long!;
+    });
+    print("Values Set");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +90,7 @@ class _ChooseDriverState extends State<ChooseDriver> {
           children: [
             ElevatedButton(
               onPressed: () async {
-                fetchedData = await requestAllDrivers();
+                fetchedData = await requestAllDrivers(riderLat, riderLong);
                 print(fetchedData);
                 setState(() {
                   driverData = DriverData(fetchedData);
@@ -95,8 +122,8 @@ class _ChooseDriverState extends State<ChooseDriver> {
             icon: const Icon(Icons.refresh)));
   }
 
-  Future<List> requestAllDrivers() async {
-    var fetchedData = await OrbitDBConnector().getDrivers();
+  Future<List> requestAllDrivers(int riderLat, int riderLong) async {
+    var fetchedData = await OrbitDBConnector().getDrivers(riderLat, riderLong);
     return fetchedData.data;
   }
 

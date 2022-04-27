@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3dart/credentials.dart';
 
 class RiderLoginForm extends StatefulWidget {
   const RiderLoginForm({Key? key}) : super(key: key);
@@ -11,8 +13,10 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
   final _riderLoginFormKey = GlobalKey<FormState>();
 
   // Form Controllers
-  TextEditingController _emailController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ethPrivateKeyController =
+      TextEditingController();
+  final TextEditingController _ethPublicKeyController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +61,11 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                  controller: _emailController,
+                                  controller: _nameController,
                                   decoration: const InputDecoration(
                                     prefixIcon: Icon(Icons.email),
                                     border: InputBorder.none,
-                                    labelText: 'Email ID',
+                                    labelText: 'Name',
                                   ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
@@ -74,11 +78,28 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
                           child: Padding(
                               padding: const EdgeInsets.only(left: 5.0),
                               child: TextFormField(
-                                  controller: _passwordController,
+                                  controller: _ethPrivateKeyController,
                                   decoration: const InputDecoration(
                                     prefixIcon: Icon(Icons.vpn_key),
                                     border: InputBorder.none,
-                                    labelText: 'Password',
+                                    labelText: 'Eth Key',
+                                  ))))),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 15.0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: TextFormField(
+                                  controller: _ethPublicKeyController,
+                                  decoration: const InputDecoration(
+                                    prefixIcon: Icon(Icons.email),
+                                    border: InputBorder.none,
+                                    labelText: 'Public Key',
                                   ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
@@ -107,7 +128,16 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
+          onPressed: () async {
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+
+            String privateEthKey = _ethPrivateKeyController.text;
+            String publicEthKey = _ethPublicKeyController.text;
+
+            await prefs.setString('driverPrivateKey', privateEthKey);
+            await prefs.setString('driverPublicKey', publicEthKey);
+
             Navigator.pushNamed(context, '/drivermain');
           },
           label: const Text("Driver Main Page"),

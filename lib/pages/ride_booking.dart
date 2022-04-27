@@ -8,6 +8,7 @@ import 'package:blockchain_ridesharing/search_delegate_options.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:blockchain_ridesharing/contract_linking.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'choose_driver.dart';
 
 class BookRide extends StatefulWidget {
@@ -52,6 +53,24 @@ class _BookRideState extends State<BookRide> {
 
   String buttonText = "_addmarker";
   late Driver selectedDriver;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setRidersLocation();
+  }
+
+  Future<void> setRidersLocation() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setInt('riderLat', 100);
+    await prefs.setInt('riderLong', 100);
+
+    // setState(() {
+    //   _ethPublicKey = ethPublicKey!;
+    // });
+  }
 
   // Structure for Ride Struct for Blockchain
 
@@ -300,7 +319,8 @@ class _BookRideState extends State<BookRide> {
                                                         TextStyle(fontSize: 10),
                                                   ),
                                                   onPressed: () async {
-                                                    contractLink.endRide();
+                                                    print(selectedDriver.driverAddress.toString());
+                                                    contractLink.endRide("0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c");
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(

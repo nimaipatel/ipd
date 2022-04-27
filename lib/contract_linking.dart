@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' show Client;
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart'
     show ContractAbi, ContractEvent, ContractFunction, Credentials, DeployedContract, EthPrivateKey, EtherAmount, EthereumAddress, FilterOptions, Transaction, Wallet, Web3Client;
 import 'package:web3dart/web3dart.dart';
@@ -15,7 +16,9 @@ class ContractLinking extends ChangeNotifier {
   final String _wsUrl = "ws://10.0.2.2:7545/";
   final String _riderSK =
       "452a1e3f893f88db62dfe874ac2356885306cbb9beabf69becd6f4341dd7954c";
-  final String _driverAddress = "0xE556AbdEcC3C89820e53dD379547070817f55472";
+
+
+  // final String _driverAddress = "0xE556AbdEcC3C89820e53dD379547070817f55472";
 
 
   late Web3Client _client;
@@ -46,6 +49,18 @@ class ContractLinking extends ChangeNotifier {
   ContractLinking() {
     initalSetup();
   }
+
+  // Add this Functionality later
+  // Future<void> getRiderAddress() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  //   // var add =  prefs.getString('riderLat');
+  //
+  //
+  //   // setState(() {
+  //   //   _ethPublicKey = ethPublicKey!;
+  //   // });
+  // }
 
   initalSetup() async {
     _client = Web3Client(_rpcUrl, Client(), socketConnector: () {
@@ -164,7 +179,7 @@ class ContractLinking extends ChangeNotifier {
   }
 
   // Added value parameter to callContract, make sure to fix final parts
-  endRide() async {
+  endRide(String _driverAddress) async {
     isLoading = true;
     notifyListeners();
 

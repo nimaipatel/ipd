@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LandingPage(),
         '/driver': (context) => const DriverLandingPage(),
-        '/drivermain': (context) => const DriverLandingPage(),
+        '/drivermain': (context) => const DriverMainPage(),
         '/signup': (context) => const RiderRegistrationForm(),
         '/signin': (context) => const RiderLoginForm(),
         '/ridebook': (context) => const BookRide(),

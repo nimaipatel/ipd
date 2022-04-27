@@ -9,13 +9,13 @@ class OrbitDBConnector extends ChangeNotifier{
   late bool isLoading = false;
   OrbitDBConnector() : _dio = Dio();
 
-  Future<Response> getDrivers() async {
+  Future<Response> getDrivers(int riderLat, int riderLong) async {
     final response = await _dio.get(
       _baseUrl + "getCloseDrivers",
       queryParameters: {
         "name": "test",
-        "currentLat" : "50",
-        "currentLong" : "50"
+        "currentLat" : riderLat,
+        "currentLong" : riderLong
       }
     );
     isLoading = false;

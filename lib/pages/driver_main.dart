@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/credentials.dart';
 import '../contract_linking.dart';
 
@@ -14,12 +15,34 @@ class DriverMainPage extends StatefulWidget {
 class _DriverMainPageState extends State<DriverMainPage> {
   List _rideList = [];
   List _filteredRideList = [];
+
+  String _ethPublicKey = "";
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getEthereumKey();
+  }
+
+  Future<void> getEthereumKey() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var ethPrivateKey = prefs.getString('driverPrivateKey');
+    var ethPublicKey = prefs.getString('driverPublicKey');
+
+    ethPublicKey ??= "0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c";
+
+    setState(() {
+      _ethPublicKey = ethPublicKey!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var contractLink = Provider.of<ContractLinking>(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Driver Main'),
+          title: Text(_ethPublicKey),
           centerTitle: true,
         ),
         body: ListView.builder(
@@ -33,7 +56,7 @@ class _DriverMainPageState extends State<DriverMainPage> {
               for (var ride in _rideList) {
                 if (ride.driverAddress ==
                     EthereumAddress.fromHex(
-                        "0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c")) {
+                        _ethPublicKey)) {
                   _filteredRideList.add(ride);
                 }
               }
