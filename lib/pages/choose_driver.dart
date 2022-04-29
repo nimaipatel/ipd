@@ -88,19 +88,7 @@ class _ChooseDriverState extends State<ChooseDriver> {
         ),
         body: Column(
           children: [
-            ElevatedButton(
-              onPressed: () async {
-                fetchedData = await requestAllDrivers(riderLat, riderLong);
-                print(fetchedData);
-                setState(() {
-                  driverData = DriverData(fetchedData);
-                  dataLength = driverData.getLength();
-                });
 
-                print(dataLength);
-              },
-              child: const Text('Get'),
-            ),
             ListView.builder(
               padding: const EdgeInsets.all(5.5),
               itemCount: driverData.getLength(),
@@ -108,16 +96,19 @@ class _ChooseDriverState extends State<ChooseDriver> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await OrbitDBConnector().addDriver();
-              },
-              child: const Text('Add'),
-            ),
-          ],
+            ],
         ),
         floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {},
+            onPressed: () async {
+              fetchedData = await requestAllDrivers(riderLat, riderLong);
+              // print(fetchedData);
+              setState(() {
+                driverData = DriverData(fetchedData);
+                dataLength = driverData.getLength();
+              });
+
+              // print(dataLength);
+            },
             label: const Text("Refresh"),
             icon: const Icon(Icons.refresh)));
   }

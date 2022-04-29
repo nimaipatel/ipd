@@ -107,6 +107,20 @@ class ContractLinking extends ChangeNotifier {
     return ridesCount;
   }
 
+  RideStatus getRideStatus(BigInt rideStatusIndex) {
+    RideStatus rideStatus;
+    if (rideStatusIndex == BigInt.from(0)){
+      rideStatus = RideStatus.Booked;
+    }else if (rideStatusIndex == BigInt.from(1)){
+      rideStatus = RideStatus.InProgress;
+    }else if(rideStatusIndex == BigInt.from(2)){
+      rideStatus = RideStatus.Completed;
+    }else {
+      rideStatus = RideStatus.Cancelled;
+    }
+    return rideStatus;
+  }
+
   // get rides
   getRides() async {
     ridesCount = await getRideCount();
@@ -116,12 +130,13 @@ class ContractLinking extends ChangeNotifier {
       var temp = await _client.call(
           contract: _contract, function: _Rides, params: [BigInt.from(i)]);
       // print(temp[4][0] is BigInt);
+      var rideStatus = getRideStatus(temp[3]);
       Coordinates pickupCoord = Coordinates((temp[4][0]).toInt()/100000, (temp[4][1]).toInt()/100000.toDouble());
       Coordinates dropoffCoord = Coordinates((temp[5][0].toInt())/100000.toDouble(), (temp[5][1].toInt())/100000.toDouble());
-      rideList.add(Ride(temp[0], temp[1], temp[2], pickupCoord, dropoffCoord,
+      rideList.add(Ride(temp[0], temp[1], temp[2], rideStatus,pickupCoord, dropoffCoord,
           temp[6], temp[7], temp[8], temp[9]));
       // print(pickupCoord);
-      // print(rideList[0]);
+      print(temp[3] is BigInt);
     }
 
     isLoading = false;
@@ -196,7 +211,6 @@ class ContractLinking extends ChangeNotifier {
   }
 }
 
-enum RideStatus { Booked, InProgress, Completed, Cancelled }
 
 
 

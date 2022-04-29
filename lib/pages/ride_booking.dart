@@ -319,8 +319,8 @@ class _BookRideState extends State<BookRide> {
                                                         TextStyle(fontSize: 10),
                                                   ),
                                                   onPressed: () async {
-                                                    print(selectedDriver.driverAddress.toString());
-                                                    contractLink.endRide("0x2A4EC1a9a5e65AAF2F8f243A29270578FCfc044c");
+
+                                                    contractLink.endRide(selectedDriver.driverAddress.toString());
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -419,6 +419,8 @@ class _BookRideState extends State<BookRide> {
     markerlist.add(_destination);
 
     coordlist = directions!.polylinePoints;
+    print(coordlist);
+
     rideDuration = directions.totalDuration;
     rideDistance = directions.totalDistance;
 

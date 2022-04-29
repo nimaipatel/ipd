@@ -1,5 +1,8 @@
 import 'package:web3dart/credentials.dart';
 
+
+enum RideStatus { Booked, InProgress, Completed, Cancelled }
+
 class AwaitingRider {
   String name;
   int projectedTime;
@@ -22,7 +25,7 @@ class Ride {
   BigInt rideID;
   EthereumAddress riderAddress;
   EthereumAddress driverAddress;
-  // RideStatus rideState;
+  RideStatus rideState;
   Coordinates pickupLocation;
   Coordinates dropoffLocation;
   BigInt bookingTime;
@@ -34,7 +37,7 @@ class Ride {
       this.rideID,
       this.riderAddress,
       this.driverAddress,
-      // this.rideState,
+      this.rideState,
       this.pickupLocation,
       this.dropoffLocation,
       this.bookingTime,

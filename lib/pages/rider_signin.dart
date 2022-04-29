@@ -108,8 +108,20 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 25.0),
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/');
+                          onPressed: () async {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+
+                            String privateEthKey =
+                                _ethPrivateKeyController.text;
+                            String publicEthKey = _ethPublicKeyController.text;
+
+                            await prefs.setString(
+                                'driverPrivateKey', privateEthKey);
+                            await prefs.setString(
+                                'driverPublicKey', publicEthKey);
+
+                            Navigator.pushNamed(context, '/drivermain');
                           },
                           child: const Text('Sign In'),
                           style: ButtonStyle(
@@ -127,21 +139,21 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-
-            String privateEthKey = _ethPrivateKeyController.text;
-            String publicEthKey = _ethPublicKeyController.text;
-
-            await prefs.setString('driverPrivateKey', privateEthKey);
-            await prefs.setString('driverPublicKey', publicEthKey);
-
-            Navigator.pushNamed(context, '/drivermain');
-          },
-          label: const Text("Driver Main Page"),
-          icon: const Icon(Icons.car_rental)),
+      // floatingActionButton: FloatingActionButton.extended(
+      //     onPressed: () async {
+      //       final SharedPreferences prefs =
+      //           await SharedPreferences.getInstance();
+      //
+      //       String privateEthKey = _ethPrivateKeyController.text;
+      //       String publicEthKey = _ethPublicKeyController.text;
+      //
+      //       await prefs.setString('driverPrivateKey', privateEthKey);
+      //       await prefs.setString('driverPublicKey', publicEthKey);
+      //
+      //       Navigator.pushNamed(context, '/drivermain');
+      //     },
+      //     label: const Text("Driver Main Page"),
+      //     icon: const Icon(Icons.car_rental)),
     );
   }
 }
