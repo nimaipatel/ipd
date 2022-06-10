@@ -13,8 +13,8 @@ class OrbitDBConnector extends ChangeNotifier {
     final response = await _dio.get(_baseUrl + "getCloseDrivers",
         queryParameters: {
           "name": "test",
-          "currentLat": "100",
-          "currentLong": "100"
+          "currentLat": riderLat,
+          "currentLong": riderLong
         });
     isLoading = false;
     notifyListeners();

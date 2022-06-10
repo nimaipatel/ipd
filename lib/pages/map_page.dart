@@ -130,7 +130,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
                                 style: TextStyle(fontSize: 20),
                               ),
                               onPressed: () async {
-                                Navigator.pop(context);
+                                Navigator.pushNamed(context, '/rating');
                               },
                               // style: ElevatedButton.styleFrom(
                               //   shape: const CircleBorder(),
@@ -175,7 +175,7 @@ class _MapPageWidgetState extends State<MapPageWidget> {
     markerlist.add(_destination);
     markerflag = true;
     coordlist = directions!.polylinePoints;
-    print(coordlist);
+    // print(coordlist);
     boundsCntrl = LatLngBounds.fromPoints(coordlist);
     mapController.fitBounds(boundsCntrl,
         options: const FitBoundsOptions(

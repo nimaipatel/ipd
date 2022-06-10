@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
 import 'package:blockchain_ridesharing/ipfs_connect.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3dart/credentials.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RiderRegistrationForm extends StatefulWidget {
   const RiderRegistrationForm({Key? key}) : super(key: key);
@@ -14,11 +21,58 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
 
   // Registration Controllers to send the data to the IPFS Server
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _ethAddressController = TextEditingController();
-  final TextEditingController _carRegnController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _carMakeController = TextEditingController();
-  final TextEditingController _carModelController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _ethPublicKeyController = TextEditingController();
+  final TextEditingController _ethPrivateKeyController =
+      TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // final TextEditingController _nameController = TextEditingController();
+  // final TextEditingController _ethAddressController = TextEditingController();
+  // final TextEditingController _carRegnController = TextEditingController();
+  // final TextEditingController _phoneNumberController = TextEditingController();
+  // final TextEditingController _carMakeController = TextEditingController();
+  // final TextEditingController _carModelController = TextEditingController();
+
+  Future<bool> saveWallet(String walletJsonString) async {
+    late Directory directory;
+    try {
+      if (Platform.isAndroid) {
+        if (await _requestPermission(Permission.storage)) {
+          directory = (await getExternalStorageDirectory())!;
+          print(directory.path);
+        } else {
+          return false;
+        }
+      }
+      File saveFile = File(directory.path + "/Wallet.json");
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (await directory.exists()) {
+        // Add code for download
+        saveFile.writeAsString(walletJsonString);
+      }
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,107 +107,155 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                 key: _RiderRegistrationFormKey,
                 children: <Widget>[
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 15.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.badge),
+                            border: InputBorder.none,
+                            labelText: 'Name',
                           ),
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: TextFormField(
-                                  controller: _nameController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.badge),
-                                    border: InputBorder.none,
-                                    labelText: 'Name',
-                                  ))))),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 15.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: TextFormField(
+                          controller: _phoneController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.badge),
+                            border: InputBorder.none,
+                            labelText: 'Mobile No.',
                           ),
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: TextFormField(
-                                  controller: _ethAddressController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.badge),
-                                    border: InputBorder.none,
-                                    labelText: 'Ethereum Address',
-                                  ))))),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 15.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.email),
+                            border: InputBorder.none,
+                            labelText: 'Email ID',
                           ),
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: TextFormField(
-                                  controller: _phoneNumberController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.email),
-                                    border: InputBorder.none,
-                                    labelText: 'Contact No.',
-                                  ))))),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 15.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: TextFormField(
+                          controller: _cityController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.smartphone),
+                            border: InputBorder.none,
+                            labelText: 'City',
                           ),
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: TextFormField(
-                                  controller: _carRegnController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.smartphone),
-                                    border: InputBorder.none,
-                                    labelText: 'Car Registration No.',
-                                  ))))),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 15.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: TextFormField(
+                          controller: _ethPublicKeyController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.vpn_key),
+                            border: InputBorder.none,
+                            labelText: 'Public Key',
                           ),
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: TextFormField(
-                                  controller: _carMakeController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.vpn_key),
-                                    border: InputBorder.none,
-                                    labelText: 'Car Make',
-                                  ))))),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 15.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: TextFormField(
+                          controller: _ethPrivateKeyController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.add_location),
+                            border: InputBorder.none,
+                            labelText: 'Private Key',
                           ),
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: TextFormField(
-                                  controller: _carModelController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.add_location),
-                                    border: InputBorder.none,
-                                    labelText: 'Car Model',
-                                  ))))),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 15.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: TextFormField(
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.smartphone),
+                            border: InputBorder.none,
+                            labelText: 'Password',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 30.0),
@@ -162,21 +264,37 @@ class _RiderRegistrationFormState extends State<RiderRegistrationForm> {
                             vertical: 20.0, horizontal: 25.0),
                         child: ElevatedButton(
                           onPressed: () async {
-                            await OrbitDBConnector().addDriver(
-                                _ethAddressController.text,
-                                _nameController.text,
-                                _phoneNumberController.text,
-                                _carRegnController.text,
-                                _carMakeController.text,
-                                _carModelController.text);
-                            final SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
+                            final password = _passwordController.text;
+                            final EthPrivateKey credentials =
+                                EthPrivateKey.fromHex(
+                                    _ethPrivateKeyController.text);
+                            final random = Random.secure();
+                            final wallet =
+                                Wallet.createNew(credentials, password, random);
 
-                            String publicEthKey = _ethAddressController.text;
-                            await prefs.setString(
-                                'driverPublicKey', publicEthKey);
+                            final prefs = await SharedPreferences.getInstance();
+                            var walletJson = json.encode(wallet.toJson());
+                            print(walletJson);
+                            prefs.setString("wallet", walletJson);
+                            bool saved = await saveWallet(walletJson);
+                            if (saved){
+                              print("User saved");
+                            }
+                            // await OrbitDBConnector().addDriver(
+                            //     _ethAddressController.text,
+                            //     _nameController.text,
+                            //     _phoneNumberController.text,
+                            //     _carRegnController.text,
+                            //     _carMakeController.text,
+                            //     _carModelController.text);
+                            // final SharedPreferences prefs =
+                            //     await SharedPreferences.getInstance();
+                            //
+                            // String publicEthKey = _ethAddressController.text;
+                            // await prefs.setString(
+                            //     'driverPublicKey', publicEthKey);
 
-                            Navigator.pushNamed(context, '/drivermain');
+                            Navigator.pushNamed(context, '/riderBook');
                           },
                           child: const Text('Register'),
                           style: ButtonStyle(

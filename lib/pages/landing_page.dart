@@ -1,9 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({Key? key}) : super(key: key);
 
+
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      }
+    }
+    return false;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,8 +42,25 @@ class LandingPage extends StatelessWidget {
               )),
             ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/ridebook');
+              onPressed: () async {
+                late Directory directory;
+                try{
+                  if (Platform.isAndroid) {
+                    if (await _requestPermission(Permission.storage)) {
+                      directory = (await getExternalStorageDirectory())!;
+                      var exists = File(directory.path + '/Wallet.json').existsSync();
+                      print(directory.path);
+                      if(exists){
+                        Navigator.pushNamed(context, '/riderBook');
+                      }else{
+                        Navigator.pushNamed(context, '/rider');
+                      }
+                    }
+                  }
+                }catch(e){
+                  print(e);
+                }
+
               },
               child: const Text('Ride with us!'),
               style: ButtonStyle(

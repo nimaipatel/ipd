@@ -16,7 +16,7 @@ class DriverLandingPage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/signin');
+                Navigator.pushNamed(context, '/driverSignIn');
               },
               child: const Text('Sign In'),
               style: ButtonStyle(
@@ -28,7 +28,7 @@ class DriverLandingPage extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/signup');
+                Navigator.pushNamed(context, '/driverSignUp');
               },
               child: const Text('Sign Up!'),
               style: ButtonStyle(

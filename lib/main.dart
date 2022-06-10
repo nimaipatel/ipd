@@ -1,7 +1,9 @@
 import 'package:blockchain_ridesharing/pages/choose_driver.dart';
 import 'package:blockchain_ridesharing/pages/driver_landing_page.dart';
 import 'package:blockchain_ridesharing/pages/driver_main.dart';
+import 'package:blockchain_ridesharing/pages/driver_signup.dart';
 import 'package:blockchain_ridesharing/pages/ride_ended.dart';
+import 'package:blockchain_ridesharing/pages/rider_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:blockchain_ridesharing/pages/landing_page.dart';
 import 'package:blockchain_ridesharing/pages/rider_signup.dart';
@@ -23,13 +25,19 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const LandingPage(),
+
         '/driver': (context) => const DriverLandingPage(),
-        '/drivermain': (context) => const DriverMainPage(),
-        '/signup': (context) => const RiderRegistrationForm(),
-        '/signin': (context) => const RiderLoginForm(),
-        '/ridebook': (context) => const BookRide(),
-        '/map':(context) => const MapPageWidget()
-        //'/confrial': (context) => ConfTrial()
+        '/driverMain': (context) => const DriverMainPage(),
+        '/driverSignUp': (context) => const DriverRegistrationForm(),
+        '/driverSignIn': (context) => const RiderLoginForm(),
+
+        '/rider': (context) => const RiderLandingPage(),
+        '/riderSignUp': (context) => const RiderRegistrationForm(),
+        '/riderSignIn': (context) => const RiderLoginForm(),
+        '/riderBook': (context) => const BookRide(),
+
+        '/map':(context) => const MapPageWidget(),
+        '/rating' : (context) => const RideEnd()
       },
     ),
     );

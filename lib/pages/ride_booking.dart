@@ -319,8 +319,12 @@ class _BookRideState extends State<BookRide> {
                                                         TextStyle(fontSize: 10),
                                                   ),
                                                   onPressed: () async {
-
-                                                    contractLink.endRide(selectedDriver.driverAddress.toString());
+                                                    contractLink.endRide(
+                                                        selectedDriver
+                                                            .driverAddress
+                                                            .toString());
+                                                    Navigator.pushNamed(
+                                                        context, '/rating');
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -382,7 +386,7 @@ class _BookRideState extends State<BookRide> {
                       toggleState();
                       //
                     },
-                    label: const Text("buttonText"),
+                    label: const Text("Ride"),
                     icon: const Icon(Icons.car_rental)))
             : Visibility(
                 visible: visibleTopMenu,

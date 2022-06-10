@@ -67,23 +67,23 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
                                     border: InputBorder.none,
                                     labelText: 'Name',
                                   ))))),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 15.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: TextFormField(
-                                  controller: _ethPrivateKeyController,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.vpn_key),
-                                    border: InputBorder.none,
-                                    labelText: 'Eth Key',
-                                  ))))),
+                  // Padding(
+                  //     padding: const EdgeInsets.symmetric(
+                  //         vertical: 10.0, horizontal: 15.0),
+                  //     child: Container(
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.white,
+                  //           borderRadius: BorderRadius.circular(5.0),
+                  //         ),
+                  //         child: Padding(
+                  //             padding: const EdgeInsets.only(left: 5.0),
+                  //             child: TextFormField(
+                  //                 controller: _ethPrivateKeyController,
+                  //                 decoration: const InputDecoration(
+                  //                   prefixIcon: Icon(Icons.vpn_key),
+                  //                   border: InputBorder.none,
+                  //                   labelText: 'Eth Key',
+                  //                 ))))),
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 15.0),
@@ -116,12 +116,12 @@ class _RiderLoginFormState extends State<RiderLoginForm> {
                                 _ethPrivateKeyController.text;
                             String publicEthKey = _ethPublicKeyController.text;
 
-                            await prefs.setString(
-                                'driverPrivateKey', privateEthKey);
+                            // await prefs.setString(
+                            //     'driverPrivateKey', privateEthKey);
                             await prefs.setString(
                                 'driverPublicKey', publicEthKey);
 
-                            Navigator.pushNamed(context, '/drivermain');
+                            Navigator.pushNamed(context, '/driverMain');
                           },
                           child: const Text('Sign In'),
                           style: ButtonStyle(

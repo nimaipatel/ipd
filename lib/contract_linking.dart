@@ -1,23 +1,26 @@
-import 'dart:convert' show jsonDecode, jsonEncode;
+import 'dart:convert' show json, jsonDecode, jsonEncode;
 import 'package:blockchain_ridesharing/riders.dart';
 import 'package:flutter/cupertino.dart' show ChangeNotifier;
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' show Client;
 import 'package:latlong2/latlong.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart'
     show ContractAbi, ContractEvent, ContractFunction, Credentials, DeployedContract, EthPrivateKey, EtherAmount, EthereumAddress, FilterOptions, Transaction, Wallet, Web3Client;
 import 'package:web3dart/web3dart.dart';
 import 'package:web_socket_channel/io.dart' show IOWebSocketChannel;
+import 'dart:io';
 
 class ContractLinking extends ChangeNotifier {
   final String _rpcUrl = "http://10.0.2.2:7545";
   final String _wsUrl = "ws://10.0.2.2:7545/";
-  final String _riderSK =
+  late String _riderSK =
       "452a1e3f893f88db62dfe874ac2356885306cbb9beabf69becd6f4341dd7954c";
 
-
+  // late EthPrivateKey _riderSK;
   // final String _driverAddress = "0xE556AbdEcC3C89820e53dD379547070817f55472";
 
 
@@ -70,7 +73,18 @@ class ContractLinking extends ChangeNotifier {
     await getCredentials();
     await getDeployedContract();
   }
-
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   Future<void> getAbi() async {
     String abiFile =
         await rootBundle.loadString("contracts/build/contracts/Main.json");
@@ -82,8 +96,25 @@ class ContractLinking extends ChangeNotifier {
 
   Future<void> getCredentials() async {
     _credentials = await _client.credentialsFromPrivateKey(_riderSK);
-    _ethKey = EthPrivateKey.fromHex(_riderSK);
-  }
+    _ethKey = EthPrivateKey.fromHex(_riderSK);}
+  //   if (await _requestPermission(Permission.storage)) {
+  //     var directory = (await getExternalStorageDirectory())!;
+  //     var exists = File(directory.path + '/Wallet.json').existsSync();
+  //     print(directory.path);
+  //     if(exists){
+  //       File walletJson = File(directory.path + '/Wallet.json');
+  //       String encoded = walletJson.readAsStringSync();
+  //       print(encoded);
+  //       print("Hello");
+  //       var wallet = Wallet.fromJson(encoded, "omnaik123");
+  //       // _credentials = wallet.privateKey;
+  //
+  //       print("Hi");
+  //     }else{
+  //
+  //     }
+  //   }
+  // }
 
   Future<void> getDeployedContract() async {
     _contract = DeployedContract(

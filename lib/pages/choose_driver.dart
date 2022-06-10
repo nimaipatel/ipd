@@ -60,7 +60,7 @@ class _ChooseDriverState extends State<ChooseDriver> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //getRidersLocation();
+    getRidersLocation();
   }
 
   Future<void> getRidersLocation() async {
