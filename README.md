@@ -12,7 +12,7 @@ Asst. Prof. Harshal Dalvi
 
 # Paper
 
-A paper produced as part of this project is accepted for publication in [IBSSC 2022](https://www.ieeebombay.org/ibssc2022/).
+A paper produced as part of this project is accepted at [IBSSC 2022](https://www.ieeebombay.org/ibssc2022/).
 It will be published in IEEE Xplore.
 
 # Build and deploy
