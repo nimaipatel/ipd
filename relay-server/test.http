@@ -1,0 +1,34 @@
+GET http://localhost:3000
+
+####
+
+POST http://localhost:3000/addDriver
+Content-Type: application/json
+
+{
+	"_id": "3",
+	"name": "Ken",
+	"carMake": "Maruti",
+	"lat": "50",
+	"long": "50"
+}
+
+####
+
+GET http://localhost:3000/getDriverBy_id
+Content-Type: application/json
+
+{
+	"_id": "2"
+}
+
+####
+
+GET http://localhost:3000/getCloseDrivers
+Content-Type: application/json
+
+{
+	"name": "test user",
+	"lat": "50",
+	"long": "50"
+}

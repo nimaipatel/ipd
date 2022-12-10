@@ -1,16 +1,28 @@
-# blockchain_ridesharing
+# A decentralized ride-hailing system built using blockchain and IPFS
 
-A new Flutter project.
+Junior year capstone project completed in requirement of the *Innovative Product Development* course.
 
-## Getting Started
+Team:
 
-This project is a starting point for a Flutter application.
+- [Om Naik](https://github.com/nike1421)
+- [Nimai Patel](https://github.com/nimaipatel) (me)
 
-A few resources to get you started if this is your first Flutter project:
+Advisor and mentor:
+Asst. Prof. Harshal Dalvi
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Paper
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A paper produced as part of this project is accepted for publication in [IBSSC 2022](https://www.ieeebombay.org/ibssc2022/).
+It will be published in IEEE Xplore.
+
+# Build and deploy
+
+The mobile app can be built like any Flutter + Dart project. Refer to [Flutter documentation](https://docs.flutter.dev/).
+
+For deploying the smart contracts, move to the `contracts` folder and execute `truffle compile && truffle migrate`.
+
+The relay-server can be deployed using `npm run start`.
+
+# System architecture
+
+![System architecture](architecture.jpg)
