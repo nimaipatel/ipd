@@ -25,4 +25,4 @@ The relay-server can be deployed using `npm run start`.
 
 # System architecture
 
-![System architecture](architecture.jpg)
+![System architecture](./architecture.jpeg)
